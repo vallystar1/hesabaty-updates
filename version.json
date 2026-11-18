@@ -1,0 +1,16 @@
+{
+  "web": {
+    "version": "1.2.1",
+    "build": 5,
+    "minNative": 4,
+    "file": "index.html",
+    "sig": "index.html.sig",
+    "sha256": "544e41d5cbeeda3f9a65fcd137e7bcd502bd10ad8e9bafeaf9a6d22e2a503d4d"
+  },
+  "apk": {
+    "versionCode": 4,
+    "versionName": "1.2.0",
+    "file": "hesabaty.apk",
+    "sha256": "bdc4f3e43d5ec42a7eeaa8bbe7a4af27f063539a44f03fcdc7f0e1a3583fcc51"
+  }
+}

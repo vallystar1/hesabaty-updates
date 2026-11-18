@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="web-build" content="5">
+<meta name="min-native" content="4">
+<meta name="theme-color" content="#15171c">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>حساباتي</title>
+<style>
+:root{
+  --ink:#15171c; --ink2:#22252d; --ink3:#2f333d;
+  --gold1:#f5dc93; --gold:#d6ab3a; --gold2:#b88a1e; --goldd:#7a5b0c; --goldl:#fbf4e1;
+  --sil1:#f7f8fa; --sil:#c9cdd3; --sil2:#9aa0a8; --sild:#4b515a; --sill:#eceef1;
+  --bg:#f1f2f4; --card:#ffffff; --text:#16181d; --muted:#5d636c; --line:#e1e4e8;
+  --red:#b42318; --redl:#fdecea; --ok:#2d6a4f;
+  --r:18px; --sh:0 6px 18px rgba(21,23,28,.08), 0 1px 3px rgba(21,23,28,.06);
+  --gold-grad:linear-gradient(135deg,#f5dc93 0%,#d6ab3a 45%,#b88a1e 100%);
+  --sil-grad:linear-gradient(135deg,#ffffff 0%,#e7e9ec 55%,#c9cdd3 100%);
+  --dark-grad:linear-gradient(150deg,#2b2f38 0%,#1a1c22 55%,#121317 100%);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+html,body{overflow-x:hidden;max-width:100%;margin:0;padding:0;background:var(--bg);color:var(--text);
+  font-family:"Noto Sans Arabic UI","Noto Sans Arabic","Segoe UI",Tahoma,sans-serif;font-size:16px;line-height:1.55}
+button,input,select,textarea{font:inherit;color:inherit}
+.sr-only{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.num{direction:ltr;unicode-bidi:isolate;display:inline-block}
+svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+@media (prefers-reduced-motion:no-preference){
+  .screen{animation:fade .22s ease-out} .sheet{animation:up .24s cubic-bezier(.2,.8,.2,1)}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  @keyframes up{from{transform:translateY(40px);opacity:.6}to{transform:none;opacity:1}}
+}
+:focus-visible{outline:3px solid #2563eb!important;outline-offset:2px}
+
+/* شريط علوي */
+.appbar{position:sticky;top:0;z-index:10;background:var(--ink);color:#fff;display:flex;align-items:center;gap:6px;padding:8px 10px;min-height:58px;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+.appbar h1{flex:1;margin:0;font-size:19px;font-weight:800;outline:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.appbar h1 .brand{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ibtn{display:inline-flex;align-items:center;justify-content:center;min-width:46px;min-height:46px;border-radius:14px;border:none;background:rgba(255,255,255,.08);color:#fff;cursor:pointer}
+.ibtn[hidden]{display:none}
+
+main{padding:14px 14px 110px;max-width:880px;margin:0 auto}
+.screen[hidden]{display:none}
+
+/* شريط التبويبات */
+.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:12;background:rgba(21,23,28,.97);display:grid;grid-template-columns:repeat(4,1fr);padding:6px 6px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -4px 16px rgba(0,0,0,.18)}
+.tabbar[hidden]{display:none}
+.tab{border:none;background:none;color:var(--sil2);display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12.5px;font-weight:700;min-height:56px;border-radius:14px;cursor:pointer}
+.tab[aria-current="page"]{color:var(--gold1);background:rgba(214,171,58,.12)}
+
+/* كروت */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:14px;margin-bottom:12px}
+.card h2,.sec-t{font-size:16.5px;font-weight:800;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.sec-t{margin:18px 4px 10px}
+.sec-t .more{margin-inline-start:auto;font-size:14px}
+.muted{color:var(--muted)} .small{font-size:14px}
+
+/* البطاقة الرئيسية */
+.hero{background:var(--dark-grad);color:#fff;border-radius:22px;padding:18px;margin-bottom:14px;position:relative;overflow:hidden;box-shadow:0 10px 26px rgba(21,23,28,.28)}
+.hero::after{content:"";position:absolute;inset:auto -60px -80px auto;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(214,171,58,.35),rgba(214,171,58,0) 70%)}
+.hero .lbl{color:var(--sil);font-size:14px}
+.hero .big{font-size:32px;font-weight:900;line-height:1.2;margin:4px 0 2px;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .cur{font-size:15px;color:var(--gold1);font-weight:700}
+.hero .row{display:flex;gap:10px;margin-top:12px;position:relative;z-index:1;flex-wrap:wrap}
+.pill{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:6px 10px;font-size:13.5px;color:var(--sil1)}
+.pill b{color:#fff}
+
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.stat{background:var(--card);border-radius:16px;box-shadow:var(--sh);padding:10px;text-align:center}
+.stat .v{font-weight:900;font-size:17px;display:block}
+.stat .k{font-size:12.5px;color:var(--muted)}
+.stat.g{background:var(--goldl)} .stat.s{background:var(--sil-grad)}
+
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.qbtn{border:none;border-radius:16px;min-height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-weight:800;font-size:14px;cursor:pointer;box-shadow:var(--sh)}
+.qbtn.g{background:var(--gold-grad);color:var(--ink)} .qbtn.s{background:var(--sil-grad);color:var(--ink)} .qbtn.d{background:var(--ink2);color:var(--gold1)}
+
+/* أزرار */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:14px;min-height:50px;padding:8px 16px;font-weight:800;cursor:pointer;background:var(--gold-grad);color:var(--ink);box-shadow:0 3px 8px rgba(184,138,30,.3)}
+.btn.sec{background:var(--sil-grad);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--sil)}
+.btn.dark{background:var(--ink2);color:var(--gold1);box-shadow:none}
+.btn.danger{background:var(--red);color:#fff;box-shadow:none}
+.btn.ghost{background:transparent;color:var(--goldd);box-shadow:none;min-height:44px;padding:4px 8px}
+.btn.block{width:100%} .btn.sm{min-height:42px;font-size:14px;padding:6px 12px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px} .row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.row2>*,.row3>*{min-width:0}
+
+/* قوائم */
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:center;gap:12px;width:100%;text-align:right;background:var(--card);border:none;border-radius:16px;box-shadow:var(--sh);padding:12px;cursor:pointer;min-height:66px}
+.av{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;flex:none;background:var(--sil-grad);color:var(--ink);box-shadow:inset 0 0 0 1px var(--sil)}
+.av.g{background:var(--gold-grad)}
+.item .mid{flex:1;min-width:0} .item .nm{font-weight:800;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .sub{font-size:13px;color:var(--muted)}
+.amt{font-weight:900;white-space:nowrap} .amt.pos{color:var(--red)} .amt.zero{color:var(--sild)} .amt.neg{color:var(--ok)}
+
+/* حركات */
+.ent{display:block;width:100%;text-align:right;background:var(--card);border:none;border-radius:16px;box-shadow:var(--sh);padding:12px 14px;cursor:pointer;position:relative;overflow:hidden}
+.ent::before{content:"";position:absolute;top:0;bottom:0;right:0;width:5px;background:var(--sil)}
+.ent.w::before{background:var(--gold-grad)} .ent.c::before{background:var(--gold2)}
+.ent .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.chip{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:800}
+.chip.w{background:var(--goldl);color:var(--goldd)} .chip.p{background:var(--sill);color:var(--sild)} .chip.d{background:#f3eefc;color:#5b3e99} .chip.c{background:#fff3e0;color:#8a4b00}
+.ent .det{font-size:14px;color:var(--muted);margin-top:4px}
+.ent .bal{margin-top:6px;font-size:14px;display:flex;justify-content:space-between}
+.ent .bal b{font-size:15px}
+
+.tbl-wrap{overflow-x:auto;background:var(--card);border-radius:16px;box-shadow:var(--sh)}
+table.t{border-collapse:collapse;width:100%;min-width:660px;font-size:14px}
+table.t th{background:var(--ink);color:var(--gold1);padding:10px 6px;font-weight:800;position:sticky;top:0}
+table.t td{padding:9px 6px;border-bottom:1px solid var(--line);text-align:center;white-space:nowrap}
+table.t td.st{text-align:right;white-space:normal}
+table.t tr.p td{background:#f7f8fa} table.t tr.prev td{background:var(--goldl);font-weight:800}
+.lnk{background:none;border:none;color:var(--goldd);font-weight:800;text-decoration:underline;min-height:40px;cursor:pointer}
+
+/* بطاقة العميل */
+.chero{background:var(--dark-grad);color:#fff;border-radius:22px;padding:16px;margin-bottom:12px;box-shadow:0 10px 26px rgba(21,23,28,.25)}
+.chero .top{display:flex;align-items:center;gap:12px}
+.chero .av{width:52px;height:52px;font-size:22px}
+.chero .nm{font-size:19px;font-weight:900}
+.chero .ph{color:var(--sil);font-size:14px}
+.chero .bl{margin-top:12px}
+.chero .bl .lbl{color:var(--sil);font-size:13.5px}
+.chero .bl .big{font-size:28px;font-weight:900;background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.chero .acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.chero .acts button{flex:1;min-width:88px;min-height:44px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.07);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
+.mini{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.mini div{background:var(--card);border-radius:14px;box-shadow:var(--sh);padding:8px;text-align:center;font-size:12.5px;color:var(--muted)}
+.mini b{display:block;color:var(--text);font-size:15px}
+.tools{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 8px;margin-bottom:4px}
+.tools button{flex:none;border:none;background:var(--card);box-shadow:var(--sh);border-radius:999px;min-height:42px;padding:6px 14px;font-weight:700;display:flex;align-items:center;gap:6px;cursor:pointer;font-size:14px}
+.tools button[aria-pressed="true"]{background:var(--ink);color:var(--gold1)}
+
+/* نماذج */
+label{display:block;font-weight:800;margin:12px 0 5px;font-size:15px}
+input[type=text],input[type=tel],input[type=date],input[type=search],input[type=password],select,textarea{width:100%;min-height:50px;border:1.5px solid var(--line);border-radius:14px;padding:10px 12px;background:#fff;transition:border-color .15s}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px rgba(214,171,58,.22)}
+textarea{min-height:76px}
+.search{position:relative;margin-bottom:12px} .search svg{position:absolute;top:14px;right:12px;color:var(--sil2)} .search input{padding-right:42px;border-radius:16px;box-shadow:var(--sh);border-color:transparent}
+.hint{font-size:13.5px;color:var(--muted);margin-top:4px}
+.err{color:var(--red);font-weight:800;font-size:14.5px;margin-top:6px;min-height:1px}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:var(--sill);border-radius:14px;padding:4px}
+.seg label{margin:0;text-align:center;border-radius:11px;padding:10px 2px;min-height:46px;font-size:14.5px;cursor:pointer;color:var(--sild);position:relative}
+.seg input{position:absolute;opacity:0;width:1px;height:1px}
+.seg label.on{background:var(--ink);color:var(--gold1);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.seg label.foc{outline:3px solid #2563eb}
+.calc{background:var(--goldl);border-radius:14px;padding:10px 12px;margin-top:10px;font-size:15px}
+.chk{display:flex;align-items:center;gap:10px;font-weight:700;margin-top:10px;min-height:44px}
+.chk input{width:24px;height:24px;accent-color:var(--gold2)}
+.setrow{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.setrow:last-child{border-bottom:none}
+.logo-prev{width:84px;height:84px;border-radius:16px;background:var(--sill) center/contain no-repeat;border:1.5px dashed var(--sil)}
+
+/* تنبيهات */
+.banner{display:flex;align-items:center;gap:10px;border-radius:16px;padding:12px;margin-bottom:12px;font-weight:700;font-size:14.5px}
+.banner.g{background:var(--goldl);color:var(--goldd)} .banner.d{background:var(--ink2);color:#fff} .banner.r{background:var(--redl);color:var(--red)}
+.banner .grow{flex:1}
+.empty{text-align:center;color:var(--muted);padding:28px 10px}
+.empty svg{width:46px;height:46px;color:var(--sil);margin-bottom:6px}
+
+/* النوافذ */
+.overlay{position:fixed;inset:0;background:rgba(10,11,14,.55);z-index:30;display:flex;align-items:flex-end;justify-content:center}
+.overlay[hidden]{display:none}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:93vh;overflow:auto;border-radius:24px 24px 0 0;padding:10px 16px 18px}
+.sheet .handle{width:44px;height:5px;border-radius:9px;background:var(--sil);margin:2px auto 10px}
+.sheet h2{margin:0 0 6px;font-size:19px;font-weight:900;outline:none}
+.sheet .foot{display:grid;gap:8px;margin-top:16px}
+.toast{position:fixed;top:68px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 18px;border-radius:14px;z-index:50;max-width:90%;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,.3);border:1px solid rgba(214,171,58,.4)}
+.toast[hidden]{display:none}
+
+/* التفعيل والقفل */
+.full{min-height:calc(100vh - 80px);display:flex;flex-direction:column;justify-content:center}
+.brandbox{text-align:center;margin-bottom:18px}
+.brandbox .logo{width:84px;height:84px;margin:0 auto 10px;border-radius:24px;background:var(--dark-grad);display:flex;align-items:center;justify-content:center;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.brandbox .logo svg{width:44px;height:44px;color:var(--gold1)}
+.brandbox h2{margin:0;font-size:26px;font-weight:900}
+.code{font-family:monospace;font-size:21px;font-weight:800;letter-spacing:1px;direction:ltr;text-align:center;background:var(--ink);color:var(--gold1);border-radius:14px;padding:14px 8px;margin:8px 0;white-space:nowrap;overflow-x:auto;user-select:all}
+.kv{margin:0}.kv div{padding:10px 0;border-bottom:1px solid var(--line)}.kv div:last-child{border-bottom:none}
+.kv dt{color:var(--muted);font-size:13px}.kv dd{margin:2px 0 0;font-weight:800;font-size:15px;overflow-wrap:anywhere;word-break:break-word}
+.kv dd.mono{font-family:monospace;direction:ltr;text-align:right}
+.status{display:flex;align-items:center;gap:10px;border-radius:14px;padding:12px;margin-bottom:12px;font-weight:800}
+.status .dot{width:12px;height:12px;border-radius:50%;flex:none}
+.status.ok{background:#e8f4ee;color:var(--ok)} .status.ok .dot{background:var(--ok)}
+.status.new{background:var(--goldl);color:var(--goldd)} .status.new .dot{background:var(--gold)}
+.status.err{background:var(--redl);color:var(--red)} .status.err .dot{background:var(--red)}
+.status.idle{background:var(--sill);color:var(--sild)} .status.idle .dot{background:var(--sil2)}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+</style>
+</head>
+<body>
+<header class="appbar">
+  <button class="ibtn" id="backBtn" type="button" aria-label="رجوع" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>
+  <h1 id="title" tabindex="-1"><span class="brand">حساباتي</span></h1>
+  <button class="ibtn" id="barAction" type="button" hidden></button>
+</header>
+
+<main>
+  <!-- التفعيل -->
+  <section class="screen" id="sc-activate" hidden>
+    <div class="full">
+      <div class="brandbox"><div class="logo" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><path d="M4 5a2 2 0 012-2h12v16H6a2 2 0 00-2 2z"/><path d="M4 21V5M8 7h7M8 11h7"/></svg></div><h2>حساباتي</h2><p class="muted" style="margin:4px 0 0">دفتر حساباتك في جيبك</p></div>
+      <div class="card">
+        <h2>تفعيل البرنامج</h2>
+        <div class="banner r" id="actState" role="alert" hidden></div>
+        <p style="margin-top:0">ابعت <b>كود الجهاز</b> ده لصاحب البرنامج، وهيبعتلك <b>مفتاح التفعيل</b>.</p>
+        <p class="muted small" id="devCodeLbl" style="margin:0">كود الجهاز</p>
+        <div class="code" id="devCode" aria-describedby="devCodeLbl"></div>
+        <div class="row2"><button class="btn sec" type="button" id="copyCode">نسخ الكود</button><button class="btn sec" type="button" id="shareCode">إرسال الكود</button></div>
+        <label for="actKey">مفتاح التفعيل</label>
+        <input type="text" id="actKey" autocomplete="off" autocapitalize="characters" spellcheck="false" dir="ltr" placeholder="XXXX-XXXX-XXXX-XXXX" aria-describedby="actErr">
+        <div class="err" id="actErr" role="alert"></div>
+        <button class="btn block" type="button" id="actBtn" style="margin-top:10px">تفعيل</button>
+      </div>
+      <div class="card" id="actBackupBox" hidden>
+        <p style="margin-top:0"><b>بياناتك محفوظة ومش هتضيع.</b> تقدر تاخد منها نسخة احتياطية دلوقتي.</p>
+        <button class="btn sec block" type="button" id="actBackup">حفظ نسخة احتياطية</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- القفل -->
+  <section class="screen" id="sc-lock" hidden>
+    <div class="full">
+      <div class="brandbox"><div class="logo" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div><h2>حساباتي</h2><p class="muted" style="margin:4px 0 0">البرنامج مقفول</p></div>
+      <div class="card">
+        <label for="lockPin">الرقم السري</label>
+        <input type="password" id="lockPin" inputmode="numeric" autocomplete="off" dir="ltr" aria-describedby="lockErr">
+        <div class="err" id="lockErr" role="alert"></div>
+        <button class="btn block" type="button" id="lockBtn" style="margin-top:10px">فتح</button>
+        <button class="btn ghost block" type="button" id="lockForgot" style="margin-top:6px">نسيت الرقم السري؟</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- الرئيسية -->
+  <section class="screen" id="sc-home" hidden>
+    <div id="homeBanners"></div>
+    <div class="hero" id="homeHero"></div>
+    <div class="quick">
+      <button class="qbtn g" type="button" id="qWeigh"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 7h14M7 7l-3 7a3 3 0 006 0zM17 7l-3 7a3 3 0 006 0z"/></svg>وزنة جديدة</button>
+      <button class="qbtn s" type="button" id="qPay"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>سداد</button>
+      <button class="qbtn d" type="button" id="qCust"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0113 0M19 8v6M16 11h6"/></svg>عميل جديد</button>
+    </div>
+    <h2 class="sec-t" id="monthT">الشهر ده</h2>
+    <div class="stats" id="monthStats" aria-labelledby="monthT"></div>
+    <h2 class="sec-t" id="debtT">أعلى المديونيات</h2>
+    <div class="list" id="topDebt" role="list" aria-labelledby="debtT"></div>
+    <h2 class="sec-t" id="recentT">آخر الحركات</h2>
+    <div class="list" id="recent" role="list" aria-labelledby="recentT"></div>
+  </section>
+
+  <!-- العملاء -->
+  <section class="screen" id="sc-customers" hidden>
+    <div class="search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <label for="custSearch" class="sr-only">بحث عن عميل بالاسم أو التليفون</label>
+      <input type="search" id="custSearch" placeholder="بحث بالاسم أو التليفون" autocomplete="off"></div>
+    <div class="tools" role="group" aria-label="ترتيب العملاء">
+      <button type="button" data-sort="name" aria-pressed="true">بالاسم</button>
+      <button type="button" data-sort="bal" aria-pressed="false">الأعلى مديونية</button>
+      <button type="button" data-sort="recent" aria-pressed="false">آخر حركة</button>
+    </div>
+    <div class="list" id="custList" role="list" aria-label="العملاء"></div>
+  </section>
+
+  <!-- كشف حساب عميل -->
+  <section class="screen" id="sc-cust" hidden>
+    <div class="chero" id="custHero"></div>
+    <div class="row3" style="margin-bottom:12px">
+      <button class="btn" type="button" id="addWeigh">+ وزنة</button>
+      <button class="btn sec" type="button" id="addPay">+ سداد</button>
+      <button class="btn dark" type="button" id="addOther">+ أخرى</button>
+    </div>
+    <div class="mini" id="custMini"></div>
+    <div class="tools" role="toolbar" aria-label="أدوات الكشف">
+      <button type="button" id="tPrint"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a1 1 0 01-1-1v-6a2 2 0 012-2h14a2 2 0 012 2v6a1 1 0 01-1 1h-2"/><rect x="6" y="14" width="12" height="7"/></svg>طباعة / PDF</button>
+      <button type="button" id="tFilter" aria-expanded="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>فلترة بالتاريخ</button>
+      <button type="button" id="tShare"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>مشاركة</button>
+      <button type="button" id="tView"></button>
+      <button type="button" id="tExcel">Excel</button>
+    </div>
+    <div class="card" id="filterBox" hidden>
+      <div class="row2">
+        <div><label for="fFrom">من</label><input type="date" id="fFrom"></div>
+        <div><label for="fTo">إلى</label><input type="date" id="fTo"></div>
+      </div>
+      <button class="btn sec block sm" type="button" id="fClear" style="margin-top:10px">إلغاء الفلترة</button>
+    </div>
+    <h2 class="sec-t" id="entT">الحركات</h2>
+    <div id="entries"></div>
+  </section>
+
+  <!-- النسخ الاحتياطي -->
+  <section class="screen" id="sc-backup" hidden>
+    <div class="hero">
+      <div class="lbl">حماية بياناتك</div>
+      <div style="font-size:20px;font-weight:900;margin-top:4px">نسخة احتياطية</div>
+      <div class="row"><span class="pill" id="lastBackupTxt"></span></div>
+    </div>
+    <div class="card">
+      <h2>حفظ نسخة</h2>
+      <p class="muted" style="margin-top:0">بتحفظ كل العملاء والحركات والإعدادات في ملف. احفظه على <b>جوجل درايف</b> أو ابعته لنفسك واتساب.</p>
+      <button class="btn block" type="button" id="doBackup">حفظ نسخة احتياطية</button>
+    </div>
+    <div class="card">
+      <h2>استرجاع نسخة</h2>
+      <p class="muted" style="margin-top:0">البيانات الحالية هتتبدّل باللي في الملف، وهنحتفظ بنسخة من الحالية قبلها.</p>
+      <button class="btn sec block" type="button" id="doRestore">استرجاع من ملف</button>
+      <button class="btn ghost block" type="button" id="undoRestore" hidden>رجوع للبيانات اللي كانت قبل آخر استرجاع</button>
+    </div>
+  </section>
+
+  <!-- الإعدادات -->
+  <section class="screen" id="sc-settings" hidden>
+    <div class="card">
+      <h2>بيانات النشاط</h2>
+      <p class="muted small" style="margin-top:0">بتظهر في كشف الحساب والإيصالات.</p>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="logo-prev" id="logoPrev" role="img" aria-label="الشعار"></div>
+        <div style="flex:1;display:grid;gap:8px">
+          <button class="btn sec sm" type="button" id="logoPick">اختيار شعار</button>
+          <button class="btn ghost sm" type="button" id="logoDel">حذف الشعار</button>
+        </div>
+      </div>
+      <label for="oBiz">اسم النشاط / الشركة</label><input type="text" id="oBiz">
+      <label for="oName">اسم المالك</label><input type="text" id="oName">
+      <label for="oPhone">التليفونات</label><input type="tel" id="oPhone" dir="ltr">
+      <label for="oAddr">العنوان</label><input type="text" id="oAddr">
+      <label for="oFoot">ملاحظة أسفل الكشف والإيصال</label><textarea id="oFoot" placeholder="مثال: نشكركم على حسن تعاملكم"></textarea>
+      <button class="btn block" type="button" id="oSave" style="margin-top:12px">حفظ بيانات النشاط</button>
+    </div>
+    <div class="card">
+      <h2>الحسابات والعرض</h2>
+      <label for="setRound">تقريب «الحساب» (الوزن × السعر ÷ 1000)</label>
+      <select id="setRound">
+        <option value="floor">لأقرب جنيه — بإهمال الكسور (زي الدفتر)</option>
+        <option value="round">لأقرب جنيه — تقريب عادي</option>
+        <option value="exact">بالقروش (رقمين عشريين)</option>
+      </select>
+      <label for="setCur">اسم العملة</label><input type="text" id="setCur">
+      <label for="setView">طريقة عرض الحركات</label>
+      <select id="setView"><option value="cards">بطاقات (أسهل مع قارئ الشاشة)</option><option value="table">جدول زي الدفتر</option></select>
+      <label for="setDigits">شكل الأرقام</label>
+      <select id="setDigits"><option value="ar">عربي (١٢٣)</option><option value="en">إنجليزي (123)</option></select>
+    </div>
+    <div class="card">
+      <h2>الأمان</h2>
+      <div class="setrow"><span id="pinState"></span><button class="btn sec sm" type="button" id="pinBtn"></button></div>
+      <div class="setrow" id="pinOffRow"><span>إلغاء القفل</span><button class="btn ghost sm" type="button" id="pinOff">إلغاء</button></div>
+    </div>
+    <div class="card">
+      <h2>التفعيل</h2>
+      <p id="setLic" style="margin-top:0"></p>
+      <button class="btn sec block" type="button" id="newKeyBtn">إدخال مفتاح تفعيل جديد</button>
+    </div>
+    <div class="card">
+      <h2>عن البرنامج</h2>
+      <button type="button" class="lnk" id="aboutVer" style="text-decoration:none;color:var(--text);font-weight:700;padding:0"></button>
+      <p class="muted small" style="margin:4px 0 0">البرنامج بيتحدّث لوحده لما ينزل تحديث جديد.</p>
+    </div>
+  </section>
+
+  <!-- لوحة المطوّر -->
+  <section class="screen" id="sc-dev" hidden>
+    <div class="hero">
+      <div class="lbl">لوحة المطوّر</div>
+      <div style="font-size:24px;font-weight:900;margin-top:2px">حساباتي <span class="num" id="devVer"></span></div>
+      <div class="row" id="devPills"></div>
+    </div>
+    <div class="card">
+      <h2>قسم التحديث</h2>
+      <div class="status idle" id="devStatus" role="status"><span class="dot" aria-hidden="true"></span><span id="devStatusTxt"></span></div>
+      <div style="display:grid;gap:10px">
+        <button class="btn block" type="button" id="devCheck">فحص التحديثات الآن</button>
+        <button class="btn dark block" type="button" id="devApply">تطبيق التحديث المتحمّل</button>
+        <button class="btn ghost block" type="button" id="devReset" style="color:var(--red)">الرجوع للنسخة الأصلية اللي في التطبيق</button>
+      </div>
+      <p class="muted small" id="devLast" style="margin-bottom:0"></p>
+    </div>
+    <div class="card">
+      <h2>التفاصيل</h2>
+      <dl class="kv" id="devInfo"></dl>
+    </div>
+  </section>
+</main>
+
+<nav class="tabbar" id="tabbar" aria-label="الأقسام" hidden>
+  <button class="tab" type="button" data-tab="home"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/></svg>الرئيسية</button>
+  <button class="tab" type="button" data-tab="customers"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0113 0"/><path d="M16 4.5a3.5 3.5 0 010 7M18 14a6 6 0 013.5 6"/></svg>العملاء</button>
+  <button class="tab" type="button" data-tab="backup"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>النسخ</button>
+  <button class="tab" type="button" data-tab="settings"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>الإعدادات</button>
+</nav>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="mTitle" id="sheet">
+    <div class="handle" aria-hidden="true"></div>
+    <h2 id="mTitle" tabindex="-1"></h2>
+    <div id="mBody"></div>
+    <div class="foot" id="mFoot"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+<div class="sr-only" id="live" aria-live="polite"></div>
+
+<script>
+(function(){
+'use strict';
+
+var APP_ID = 'daftar-hesabat';
+var STORE_KEY = 'daftar_v1';
+var PREV_KEY = 'daftar_v1_before_restore';
+var VERSION = '1.2.1';
+
+// ===== الجسر مع الأندرويد =====
+var A = window.Android;
+var DEV_MODE = !A && /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /dev=1/.test(location.search);
+if (!A && DEV_MODE) {
+  A = {
+    getDeviceCode: function(){ return 'TEST-TEST-TEST-TEST'; },
+    getLicense: function(){
+      var l = JSON.parse(localStorage.getItem('dev_lic') || 'null');
+      if (!l) return JSON.stringify({state:'none'});
+      var names = {1:'تجريبي', 2:'محدد بمدة', 3:'نهائي'};
+      if (l.type === 3) return JSON.stringify({state:'active', type:3, typeName:names[3]});
+      var left = Math.round((new Date(l.expires) - new Date(todayISO())) / 86400000);
+      return JSON.stringify({state: localStorage.getItem('dev_clock') ? 'clock' : (left < 0 ? 'expired' : 'active'), type:l.type, typeName:names[l.type], expires:l.expires, daysLeft:left});
+    },
+    activate: function(k){
+      k = k.replace(/[^A-Z0-9]/gi,'').toUpperCase();
+      function add(n){ var d = new Date(); d.setDate(d.getDate() + n); return isoOf(d); }
+      var m = {TESTTESTTESTTEST:{type:3}, TRIAL:{type:1, expires:add(3)}, PERIOD:{type:2, expires:add(30)}};
+      if (k === 'OLD') return JSON.stringify({ok:false, msg:'المفتاح ده مدته خلصت'});
+      if (!m[k]) return JSON.stringify({ok:false, msg:'المفتاح غلط — اتأكد إنه للجهاز ده'});
+      localStorage.setItem('dev_lic', JSON.stringify(m[k])); localStorage.removeItem('dev_clock');
+      localStorage.setItem('dev_key', k);
+      return JSON.stringify({ok:true, license: JSON.parse(this.getLicense())});
+    },
+    isCurrentKey: function(k){ return k.replace(/[^A-Z0-9]/gi,'').toUpperCase() === localStorage.getItem('dev_key'); },
+    checkDevPass: function(p){ return p === 'dev'; },
+    sha256: function(s){ var h = 5381; for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0; return 'x' + h.toString(16); },
+    getAppVersion: function(){ return VERSION + '-dev'; },
+    getUpdateInfo: function(){ return JSON.stringify({nativeCode:4, nativeName:'1.2.0', assetBuild:5, loadedBuild:5, source:'asset', pendingBuild:-1, lastCheck:0, updateBase:'(dev)'}); },
+    checkUpdates: function(){ setTimeout(function(){ window.onUpdateStatus(window.__mockUpdate || {ok:true, manual:true}); }, 10); },
+    applyWebUpdate: function(){ window.__applied = true; },
+    resetWebUpdate: function(){ window.__reset = true; },
+    openUrl: function(u){ window.__lastUrl = u; return true; },
+    copyText: function(t){ window.__lastCopy = t; },
+    shareText: function(ti, t){ window.__lastShare = t; },
+    printHtml: function(n, h){ window.__lastPrint = {name:n, html:h}; },
+    pickImage: function(){ setTimeout(function(){ if (window.__nextImage) window.onImagePicked(true, window.__nextImage); else window.onImagePicked(false, 'تم الإلغاء'); }, 10); },
+    saveFile: function(n, m, c){ window.__lastSaved = {name:n, mime:m, content:c}; setTimeout(function(){ window.onFileSaved(true, 'تم الحفظ'); }, 10); },
+    openFile: function(){ setTimeout(function(){ if (window.__nextOpen != null) window.onFileOpened(true, window.__nextOpen); else window.onFileOpened(false, 'تم الإلغاء'); }, 10); }
+  };
+}
+function has(fn){ return A && typeof A[fn] === 'function'; }
+
+// ===== أدوات =====
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function pad(n){ return (n < 10 ? '0' : '') + n; }
+function isoOf(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+function todayISO(){ return isoOf(new Date()); }
+function toEnDigits(s){
+  return String(s == null ? '' : s)
+    .replace(/[٠-٩]/g, function(c){ return c.charCodeAt(0) - 0x0660; })
+    .replace(/[۰-۹]/g, function(c){ return c.charCodeAt(0) - 0x06F0; });
+}
+function parseNum(s){
+  s = toEnDigits(s).replace(/[٬,\s]/g, '').replace(/٫/g, '.');
+  if (s === '') return NaN;
+  if (!/^-?\d*\.?\d+$|^-?\d+\.$/.test(s)) return NaN;
+  return parseFloat(s);
+}
+function r2(n){ return Math.round(n * 100) / 100; }
+function arDigits(s){ return state.settings.digits === 'en' ? String(s) : String(s).replace(/\d/g, function(d){ return String.fromCharCode(0x0660 + +d); }); }
+function fmt(n){
+  if (n == null || isNaN(n)) return '';
+  var loc = state.settings.digits === 'en' ? 'en-US' : 'ar-EG';
+  try { return new Intl.NumberFormat(loc, {maximumFractionDigits: 2}).format(r2(n)); }
+  catch(e){ return String(r2(n)); }
+}
+function fmtDate(iso){
+  if (!iso) return '';
+  var p = iso.split('-');
+  return arDigits((+p[2]) + '/' + (+p[1]) + '/' + p[0]);
+}
+var MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+function dateWords(iso){
+  if (!iso) return '';
+  var p = iso.split('-');
+  return (+p[2]) + ' ' + MONTHS[(+p[1]) - 1] + ' ' + p[0];
+}
+function cur(){ return state.settings.currency || 'جنيه'; }
+function initials(name){ var t = String(name || '').trim(); return t ? t.charAt(0) : '؟'; }
+function icon(path){ return '<svg class="i" viewBox="0 0 24 24" aria-hidden="true">' + path + '</svg>'; }
+var IC = {
+  phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2"/>',
+  wa: '<path d="M4 20l1.3-4A8 8 0 1112 20a8 8 0 01-4-1z"/><path d="M9 10c.5 2 2 3.5 4 4l1.2-1.2 2 1-.6 1.6c-3.4.2-7.4-3.8-7.2-7.2L10 7.6l1 2z"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
+  empty: '<path d="M4 5a2 2 0 012-2h12v16H6a2 2 0 00-2 2z"/><path d="M4 21V5M8 7h7M8 11h5"/>'
+};
+
+function calcAmount(weight, price){
+  var v = weight * price / 1000;
+  var m = state.settings.rounding;
+  if (m === 'floor') return Math.floor(v + 1e-7);
+  if (m === 'round') return Math.round(v);
+  return r2(v);
+}
+
+var TYPES = {
+  weigh:    {name:'وزنة',  sign: 1, chip:'w'},
+  charge:   {name:'إضافة', sign: 1, chip:'c'},
+  pay:      {name:'سداد',  sign:-1, chip:'p'},
+  discount: {name:'خصم',   sign:-1, chip:'d'}
+};
+var METHODS = ['تحويل بنكي','كاش','إنستاباي','محفظة إلكترونية','شيك'];
+
+// ===== التفقيط (المبلغ بالحروف) =====
+var ONES = ['','واحد','اثنان','ثلاثة','أربعة','خمسة','ستة','سبعة','ثمانية','تسعة','عشرة','أحد عشر','اثنا عشر','ثلاثة عشر','أربعة عشر','خمسة عشر','ستة عشر','سبعة عشر','ثمانية عشر','تسعة عشر'];
+var TENS = ['','','عشرون','ثلاثون','أربعون','خمسون','ستون','سبعون','ثمانون','تسعون'];
+var HUNDREDS = ['','مائة','مائتان','ثلاثمائة','أربعمائة','خمسمائة','ستمائة','سبعمائة','ثمانمائة','تسعمائة'];
+function words999(n){
+  var h = Math.floor(n / 100), r = n % 100, parts = [];
+  if (h) parts.push(HUNDREDS[h]);
+  if (r) {
+    if (r < 20) parts.push(ONES[r]);
+    else { var o = r % 10, t = Math.floor(r / 10); parts.push(o ? ONES[o] + ' و' + TENS[t] : TENS[t]); }
+  }
+  return parts.join(' و');
+}
+function scaleWords(n, one, two, plural){
+  if (n === 1) return one;
+  if (n === 2) return two;
+  if (n >= 3 && n <= 10) return words999(n) + ' ' + plural;
+  return words999(n) + ' ' + one;
+}
+function intWords(n){
+  if (n === 0) return 'صفر';
+  var groups = [
+    {v:1e9, one:'مليار', two:'ملياران', pl:'مليارات'},
+    {v:1e6, one:'مليون', two:'مليونان', pl:'ملايين'},
+    {v:1e3, one:'ألف', two:'ألفان', pl:'آلاف'}
+  ], parts = [];
+  groups.forEach(function(g){
+    var q = Math.floor(n / g.v);
+    if (q) { parts.push(scaleWords(q, g.one, g.two, g.pl)); n = n % g.v; }
+  });
+  if (n) parts.push(words999(n));
+  return parts.join(' و');
+}
+function tafqeet(amount){
+  amount = Math.abs(r2(amount));
+  var pounds = Math.floor(amount + 1e-9), pia = Math.round((amount - pounds) * 100);
+  var s = 'فقط ' + intWords(pounds) + ' ' + cur();
+  if (pia) s += ' و' + intWords(pia) + ' قرش';
+  return s + ' لا غير';
+}
+
+// ===== البيانات =====
+function emptyState(){
+  return { format:1, settings:{rounding:'floor', view:'cards', digits:'ar', lastBackup:0, currency:'جنيه', nextReceipt:1,
+    owner:{biz:'', name:'', phone:'', addr:'', foot:'', logo:''}, pin:null}, customers:[], entries:[] };
+}
+var state = emptyState();
+function validData(d){ return d && typeof d === 'object' && Array.isArray(d.customers) && Array.isArray(d.entries); }
+function fixData(d){
+  var s = emptyState();
+  if (d.settings && typeof d.settings === 'object') {
+    for (var k in s.settings) if (d.settings[k] != null && k !== 'owner') s.settings[k] = d.settings[k];
+    if (d.settings.owner && typeof d.settings.owner === 'object') for (var o in s.settings.owner) if (typeof d.settings.owner[o] === 'string') s.settings.owner[o] = d.settings.owner[o];
+  }
+  s.customers = d.customers.filter(function(c){ return c && c.id && typeof c.name === 'string'; });
+  var ids = {}; s.customers.forEach(function(c){ ids[c.id] = 1; });
+  s.entries = d.entries.filter(function(e){
+    return e && e.id && ids[e.customerId] && TYPES[e.type] && /^\d{4}-\d{2}-\d{2}$/.test(e.date) && typeof e.amount === 'number' && isFinite(e.amount);
+  });
+  var maxR = 0; s.entries.forEach(function(e){ if (e.receiptNo > maxR) maxR = e.receiptNo; });
+  if (!(s.settings.nextReceipt > maxR)) s.settings.nextReceipt = maxR + 1;
+  return s;
+}
+function load(){
+  try { var raw = localStorage.getItem(STORE_KEY); if (raw) { var d = JSON.parse(raw); if (validData(d)) state = fixData(d); } }
+  catch(e) { console.error(e); }
+}
+function save(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(state)); return true; }
+  catch(e){ toast('مشكلة في حفظ البيانات على الجهاز! خد نسخة احتياطية فورًا'); return false; }
+}
+function custById(id){ for (var i = 0; i < state.customers.length; i++) if (state.customers[i].id === id) return state.customers[i]; return null; }
+function entById(id){ for (var i = 0; i < state.entries.length; i++) if (state.entries[i].id === id) return state.entries[i]; return null; }
+function sortEntries(a, b){ if (a.date !== b.date) return a.date < b.date ? -1 : 1; return (a.seq || 0) - (b.seq || 0); }
+function custEntries(cid){ return state.entries.filter(function(e){ return e.customerId === cid; }).sort(sortEntries); }
+function balanceOf(cid){ var b = 0; state.entries.forEach(function(e){ if (e.customerId === cid) b += TYPES[e.type].sign * e.amount; }); return r2(b); }
+function balanceBefore(e){ // الرصيد قبل حركة معيّنة
+  var b = 0; custEntries(e.customerId).some(function(x){ if (x.id === e.id) return true; b += TYPES[x.type].sign * x.amount; return false; }); return r2(b);
+}
+function nextSeq(){ var m = 0; state.entries.forEach(function(e){ if ((e.seq || 0) > m) m = e.seq; }); return m + 1; }
+function lastDateOf(cid){ var d = ''; state.entries.forEach(function(e){ if (e.customerId === cid && e.date > d) d = e.date; }); return d; }
+
+// ===== تنبيهات =====
+var toastT;
+function toast(msg){ var t = $('toast'); t.textContent = msg; t.hidden = false; announce(msg); clearTimeout(toastT); toastT = setTimeout(function(){ t.hidden = true; }, 3400); }
+function announce(msg){ var l = $('live'); l.textContent = ''; setTimeout(function(){ l.textContent = msg; }, 60); }
+
+// ===== الترخيص والقفل =====
+function getLic(){ try { return JSON.parse(A.getLicense()) || {state:'none'}; } catch(e){ return {state:'none'}; } }
+function tryActivate(key){ try { return JSON.parse(A.activate(key)); } catch(e){ return {ok:false, msg:'حصلت مشكلة، جرّب تاني'}; } }
+function licText(l){
+  if (!l || l.state !== 'active') return '';
+  if (l.type === 3) return 'التفعيل: نهائي';
+  return 'التفعيل: ' + l.typeName + ' — لحد ' + fmtDate(l.expires) + ' (فاضل ' + fmt(l.daysLeft) + ' يوم)';
+}
+var unlocked = false, hiddenAt = 0;
+function pinHash(p){ var s = 'hsb|' + toEnDigits(p); return has('sha256') ? A.sha256(s) : s.split('').reverse().join(''); }
+document.addEventListener('visibilitychange', function(){
+  if (document.hidden) hiddenAt = Date.now();
+  else if (state.settings.pin && hiddenAt && Date.now() - hiddenAt > 120000) { unlocked = false; stack = []; current = null; show('lock'); }
+});
+
+// ===== التنقل =====
+var stack = [], current = null;
+var TABS = {home:1, customers:1, backup:1, settings:1};
+function show(screen, arg, push){
+  if (screen !== 'activate' && getLic().state !== 'active') { stack = []; current = null; screen = 'activate'; push = false; }
+  else if (screen !== 'activate' && screen !== 'lock' && state.settings.pin && !unlocked) { stack = []; current = null; screen = 'lock'; push = false; }
+  if (TABS[screen] && push !== false) { stack = []; push = false; }
+  if (push !== false && current) stack.push(current);
+  current = {screen: screen, arg: arg};
+  Array.prototype.forEach.call(document.querySelectorAll('.screen'), function(s){ s.hidden = s.id !== 'sc-' + screen; });
+  $('backBtn').hidden = stack.length === 0;
+  var gate = screen === 'activate' || screen === 'lock';
+  $('tabbar').hidden = gate;
+  Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(t){
+    var on = t.getAttribute('data-tab') === screen || (screen === 'cust' && t.getAttribute('data-tab') === 'customers') || (screen === 'dev' && t.getAttribute('data-tab') === 'settings');
+    if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
+  });
+  $('barAction').hidden = true;
+  RENDER[screen](arg);
+  window.scrollTo(0, 0);
+  setTimeout(function(){ $('title').focus(); }, 30);
+}
+function goBack(){
+  if (!$('overlay').hidden) { closeModal(); return true; }
+  if (!stack.length) {
+    if (current && current.screen !== 'home' && TABS[current.screen]) { show('home'); return true; }
+    return false;
+  }
+  var p = stack.pop(); show(p.screen, p.arg, false); return true;
+}
+window.onAndroidBack = goBack;
+$('backBtn').onclick = goBack;
+Array.prototype.forEach.call(document.querySelectorAll('.tab'), function(t){ t.onclick = function(){ show(t.getAttribute('data-tab')); }; });
+function setTitle(t, brand){ $('title').innerHTML = brand ? '<span class="brand">' + esc(t) + '</span>' : esc(t); document.title = t; }
+function barAction(label, svg, fn){ var b = $('barAction'); b.hidden = false; b.innerHTML = icon(svg); b.setAttribute('aria-label', label); b.onclick = fn; }
+
+// ===== النوافذ =====
+var lastFocus = null;
+function openModal(title, bodyHtml, buttons){
+  lastFocus = document.activeElement;
+  $('mTitle').textContent = title;
+  $('mBody').innerHTML = bodyHtml;
+  var f = $('mFoot'); f.innerHTML = '';
+  buttons.forEach(function(b){
+    var el = document.createElement('button');
+    el.type = 'button'; el.className = 'btn ' + (b.cls || ''); el.textContent = b.text;
+    el.onclick = b.onClick; if (b.id) el.id = b.id;
+    f.appendChild(el);
+  });
+  f.style.gridTemplateColumns = buttons.length >= 3 ? '1fr 1fr 1fr' : (buttons.length === 1 ? '1fr' : '1fr 1fr');
+  $('overlay').hidden = false;
+  ['main','header','nav'].forEach(function(s){ document.querySelector(s).setAttribute('aria-hidden', 'true'); });
+  setTimeout(function(){ $('mTitle').focus(); }, 30);
+}
+function closeModal(){
+  $('overlay').hidden = true;
+  ['main','header','nav'].forEach(function(s){ document.querySelector(s).removeAttribute('aria-hidden'); });
+  if (lastFocus && document.body.contains(lastFocus)) { try { lastFocus.focus(); } catch(e){} }
+}
+$('overlay').addEventListener('click', function(e){ if (e.target === $('overlay')) closeModal(); });
+document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !$('overlay').hidden) closeModal(); });
+function confirmBox(title, msg, okText, onOk, danger){
+  openModal(title, '<p>' + msg + '</p>', [
+    {text: okText, cls: danger ? 'danger' : '', onClick: function(){ closeModal(); onOk(); }},
+    {text: 'إلغاء', cls: 'sec', onClick: closeModal}
+  ]);
+}
+
+var RENDER = {};
+
+// ===== التفعيل =====
+RENDER.activate = function(){
+  setTitle('حساباتي', true);
+  var l = getLic(), st = $('actState');
+  if (l.state === 'expired') { st.hidden = false; st.textContent = 'مدة التفعيل (' + l.typeName + ') خلصت يوم ' + fmtDate(l.expires) + '. ابعت كود الجهاز لصاحب البرنامج عشان مفتاح جديد.'; }
+  else if (l.state === 'clock') { st.hidden = false; st.textContent = 'تاريخ الموبايل مش مظبوط (راجع لورا). ظبّط التاريخ والساعة من إعدادات الموبايل وافتح البرنامج تاني.'; }
+  else st.hidden = true;
+  $('actBackupBox').hidden = !(state.customers.length || state.entries.length);
+  var dc = A.getDeviceCode();
+  $('devCode').textContent = dc;
+  $('devCode').setAttribute('aria-label', 'كود الجهاز: ' + dc.split('').join(' ').replace(/ - /g, '، '));
+};
+$('copyCode').onclick = function(){ A.copyText(A.getDeviceCode()); toast('تم نسخ الكود'); };
+$('shareCode').onclick = function(){ A.shareText('إرسال كود الجهاز', 'كود الجهاز لتفعيل «حساباتي»:\n' + A.getDeviceCode()); };
+$('actBtn').onclick = function(){
+  var k = $('actKey').value.trim();
+  if (!k) { $('actErr').textContent = 'اكتب مفتاح التفعيل'; $('actKey').focus(); return; }
+  var r = tryActivate(k);
+  if (r.ok) { $('actKey').value = ''; $('actErr').textContent = ''; toast('تم التفعيل بنجاح — ' + licText(r.license)); stack = []; current = null; show('home'); }
+  else { $('actErr').textContent = r.msg; $('actKey').focus(); }
+};
+$('actBackup').onclick = function(){ doBackup(); };
+$('actKey').addEventListener('keydown', function(e){ if (e.key === 'Enter') $('actBtn').click(); });
+
+// ===== القفل =====
+RENDER.lock = function(){ setTitle('حساباتي', true); $('lockPin').value = ''; $('lockErr').textContent = ''; setTimeout(function(){ $('lockPin').focus(); }, 80); };
+$('lockBtn').onclick = function(){
+  var p = $('lockPin').value;
+  if (state.settings.pin && pinHash(p) === state.settings.pin) { unlocked = true; stack = []; current = null; show('home'); }
+  else { $('lockErr').textContent = 'الرقم السري غلط'; $('lockPin').value = ''; $('lockPin').focus(); }
+};
+$('lockPin').addEventListener('keydown', function(e){ if (e.key === 'Enter') $('lockBtn').click(); });
+$('lockForgot').onclick = function(){
+  openModal('نسيت الرقم السري',
+    '<p>اكتب <b>مفتاح التفعيل</b> بتاع البرنامج (اللي فعّلت بيه) عشان القفل يتلغي.</p>' +
+    '<label for="fgKey">مفتاح التفعيل</label><input type="text" id="fgKey" dir="ltr" autocomplete="off" aria-describedby="fgErr"><div class="err" id="fgErr" role="alert"></div>',
+    [{text:'إلغاء القفل', onClick: function(){
+        if (has('isCurrentKey') && A.isCurrentKey($('fgKey').value)) {
+          state.settings.pin = null; save(); unlocked = true; closeModal(); toast('تم إلغاء القفل'); stack = []; current = null; show('home');
+        } else { $('fgErr').textContent = 'المفتاح مش مطابق'; $('fgKey').focus(); }
+      }}, {text:'رجوع', cls:'sec', onClick: closeModal}]);
+};
+
+// ===== التحديثات =====
+var upd = null;
+window.onUpdateStatus = function(r){
+  if (!r) return;
+  if (r.manual) lastUpd = r;
+  if (r.ok && (r.webReady || r.apkAvailable || r.webNeedsApk)) upd = r;
+  if (r.manual) {
+    if (!r.ok) toast('تعذر فحص التحديثات: ' + (r.error || 'مفيش نت'));
+    else if (r.webReady) toast('نزل تحديث جديد وجاهز للتطبيق');
+    else if (r.apkAvailable || r.webNeedsApk) toast('فيه إصدار جديد محتاج تسطيب');
+    else toast('انت على آخر إصدار');
+  }
+  if (current && (current.screen === 'home' || current.screen === 'dev')) RENDER[current.screen]();
+};
+function updateBanner(){
+  if (!upd) return '';
+  if (upd.webReady) return '<div class="banner d"><span class="grow">✨ نزل تحديث جديد للبرنامج ' + (upd.webVersion ? '(' + esc(upd.webVersion) + ')' : '') + '</span><button class="btn sm" type="button" id="updApply">تطبيق الآن</button></div>';
+  if (upd.apkAvailable || upd.webNeedsApk) return '<div class="banner d"><span class="grow">إصدار جديد من البرنامج ' + (upd.apkVersion ? '(' + esc(upd.apkVersion) + ')' : '') + ' محتاج تسطيب</span>' + (upd.apkUrl ? '<button class="btn sm" type="button" id="updApk">تحميل</button>' : '') + '</div>';
+  return '';
+}
+function bindUpdateBanner(){
+  if ($('updApply')) $('updApply').onclick = function(){ if (has('applyWebUpdate')) A.applyWebUpdate(); };
+  if ($('updApk')) $('updApk').onclick = function(){
+    confirmBox('تحميل الإصدار الجديد', 'هيتحمّل ملف البرنامج الجديد، وبعد ما يخلص افتحه واضغط «تحديث». <b>بياناتك مش هتتأثر.</b>', 'تحميل', function(){ A.openUrl(upd.apkUrl); });
+  };
+}
+
+// ===== الرئيسية =====
+RENDER.home = function(){
+  setTitle('حساباتي', true);
+  var total = 0, debtors = 0;
+  var bals = state.customers.map(function(c){ var b = balanceOf(c.id); total += b; if (b > 0) debtors++; return {c:c, b:b}; });
+  var ownerBiz = state.settings.owner.biz;
+  $('homeHero').innerHTML =
+    '<div class="lbl">' + (ownerBiz ? esc(ownerBiz) + ' — ' : '') + 'إجمالي المستحق عند العملاء</div>' +
+    '<div class="big" aria-label="' + esc(fmt(total) + ' ' + cur()) + '"><span class="num">' + fmt(total) + '</span></div><div class="cur">' + esc(cur()) + '</div>' +
+    '<div class="row"><span class="pill">العملاء <b>' + fmt(state.customers.length) + '</b></span><span class="pill">عليهم فلوس <b>' + fmt(debtors) + '</b></span><span class="pill">الحركات <b>' + fmt(state.entries.length) + '</b></span></div>';
+
+  // تنبيهات
+  var h = updateBanner();
+  var l = getLic();
+  if (l.state === 'active' && l.type !== 3) {
+    h += '<div class="banner ' + (l.daysLeft <= 7 ? 'r' : 'g') + '"><span class="grow">' + (l.daysLeft <= 0 ? 'آخر يوم في التفعيل (' + esc(l.typeName) + ') النهارده.' : 'التفعيل ' + esc(l.typeName) + ' — فاضل ' + fmt(l.daysLeft) + ' يوم (لحد ' + fmtDate(l.expires) + ').') + (l.daysLeft <= 7 ? ' كلّم صاحب البرنامج للتجديد.' : '') + '</span></div>';
+  }
+  var lb = state.settings.lastBackup || 0, days = lb ? Math.floor((Date.now() - lb) / 86400000) : -1;
+  if (state.entries.length && (days < 0 || days >= 7)) {
+    h += '<div class="banner g"><span class="grow">' + (days < 0 ? 'لسه ما أخدتش نسخة احتياطية.' : 'آخر نسخة احتياطية من ' + fmt(days) + ' يوم.') + '</span><button type="button" class="btn sm" id="warnBk">خد نسخة</button></div>';
+  }
+  $('homeBanners').innerHTML = h;
+  bindUpdateBanner();
+  if ($('warnBk')) $('warnBk').onclick = function(){ show('backup'); };
+
+  // الشهر ده
+  var mk = todayISO().slice(0, 7), w = 0, sales = 0, paid = 0;
+  state.entries.forEach(function(e){
+    if (e.date.slice(0, 7) !== mk) return;
+    if (e.type === 'weigh') { w += e.weight || 0; sales += e.amount; }
+    else if (e.type === 'pay') paid += e.amount;
+  });
+  $('monthT').textContent = 'شهر ' + MONTHS[new Date().getMonth()];
+  $('monthStats').innerHTML =
+    '<div class="stat g"><span class="v num">' + fmt(w / 1000) + '</span><span class="k">طن</span></div>' +
+    '<div class="stat"><span class="v num">' + fmt(sales) + '</span><span class="k">مبيعات</span></div>' +
+    '<div class="stat s"><span class="v num">' + fmt(paid) + '</span><span class="k">تحصيل</span></div>';
+
+  // أعلى المديونيات
+  var top = bals.filter(function(x){ return x.b > 0; }).sort(function(a, b){ return b.b - a.b; }).slice(0, 5);
+  $('topDebt').innerHTML = top.length ? top.map(function(x, i){ return custItem(x.c, x.b, i === 0); }).join('') : '<p class="empty">مفيش مديونيات 👌</p>';
+  bindCustItems($('topDebt'));
+
+  // آخر الحركات
+  var rec = state.entries.slice().sort(function(a, b){ return (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0); }).slice(0, 6);
+  $('recent').innerHTML = rec.length ? rec.map(function(e){
+    var c = custById(e.customerId);
+    return '<div role="listitem"><button type="button" class="item" data-cid="' + esc(e.customerId) + '" aria-label="' + esc((c ? c.name : '') + '، ' + TYPES[e.type].name + ' ' + fmt(e.amount) + ' ' + cur() + '، ' + dateWords(e.date)) + '">' +
+      '<span class="av ' + (TYPES[e.type].sign > 0 ? 'g' : '') + '" aria-hidden="true">' + esc(initials(c && c.name)) + '</span>' +
+      '<span class="mid"><span class="nm">' + esc(c ? c.name : '') + '</span><span class="sub"><span class="chip ' + TYPES[e.type].chip + '">' + TYPES[e.type].name + '</span> ' + fmtDate(e.date) + '</span></span>' +
+      '<span class="amt ' + (TYPES[e.type].sign > 0 ? 'pos' : 'neg') + '"><span class="num">' + fmt(e.amount) + '</span></span></button></div>';
+  }).join('') : '<div class="empty">' + icon(IC.empty) + '<br>لسه مفيش حركات. ابدأ بإضافة عميل.</div>';
+  Array.prototype.forEach.call($('recent').querySelectorAll('[data-cid]'), function(el){ el.onclick = function(){ show('cust', el.getAttribute('data-cid')); }; });
+};
+function custItem(c, b, gold){
+  var last = lastDateOf(c.id);
+  return '<div role="listitem"><button type="button" class="item" data-id="' + esc(c.id) + '" aria-label="' + esc(c.name + '، الباقي ' + fmt(b) + ' ' + cur() + (last ? '، آخر حركة ' + dateWords(last) : '')) + '">' +
+    '<span class="av ' + (gold ? 'g' : '') + '" aria-hidden="true">' + esc(initials(c.name)) + '</span>' +
+    '<span class="mid"><span class="nm">' + esc(c.name) + '</span><span class="sub">' + (last ? 'آخر حركة ' + fmtDate(last) : 'لسه مفيش حركات') + '</span></span>' +
+    '<span class="amt ' + (b > 0 ? 'pos' : (b < 0 ? 'neg' : 'zero')) + '"><span class="num">' + fmt(b) + '</span></span></button></div>';
+}
+function bindCustItems(box){ Array.prototype.forEach.call(box.querySelectorAll('.item[data-id]'), function(el){ el.onclick = function(){ show('cust', el.getAttribute('data-id')); }; }); }
+$('qCust').onclick = function(){ custForm(null); };
+$('qWeigh').onclick = function(){ pickCustomer('وزنة جديدة — اختار العميل', function(c){ entryForm(c.id, null, 'weigh'); }); };
+$('qPay').onclick = function(){ pickCustomer('سداد — اختار العميل', function(c){ entryForm(c.id, null, 'pay'); }); };
+function pickCustomer(title, cb){
+  if (!state.customers.length) { toast('ضيف عميل الأول'); custForm(null); return; }
+  openModal(title, '<label for="pkQ">بحث</label><input type="search" id="pkQ" autocomplete="off"><div class="list" id="pkList" role="list" style="margin-top:12px"></div>', [{text:'إلغاء', cls:'sec', onClick: closeModal}]);
+  function draw(){
+    var q = $('pkQ').value.trim();
+    var list = state.customers.filter(function(c){ return !q || c.name.indexOf(q) >= 0; }).sort(function(a, b){ return (lastDateOf(b.id) > lastDateOf(a.id)) ? 1 : -1; });
+    $('pkList').innerHTML = list.map(function(c){ return custItem(c, balanceOf(c.id)); }).join('') || '<p class="empty">مفيش نتايج</p>';
+    Array.prototype.forEach.call($('pkList').querySelectorAll('.item'), function(el){ el.onclick = function(){ var c = custById(el.getAttribute('data-id')); closeModal(); cb(c); }; });
+  }
+  $('pkQ').addEventListener('input', draw); draw();
+}
+
+// ===== العملاء =====
+var custSort = 'name';
+RENDER.customers = function(){
+  setTitle('العملاء');
+  barAction('إضافة عميل', '<path d="M12 5v14M5 12h14"/>', function(){ custForm(null); });
+  renderCustList();
+};
+function renderCustList(){
+  var q = $('custSearch').value.trim();
+  var list = state.customers.map(function(c){ return {c:c, b:balanceOf(c.id), d:lastDateOf(c.id)}; });
+  if (q) list = list.filter(function(x){ return x.c.name.indexOf(q) >= 0 || (x.c.phone || '').indexOf(toEnDigits(q)) >= 0; });
+  list.sort(function(a, b){
+    if (custSort === 'bal') return b.b - a.b;
+    if (custSort === 'recent') return a.d < b.d ? 1 : (a.d > b.d ? -1 : 0);
+    return a.c.name.localeCompare(b.c.name, 'ar');
+  });
+  var box = $('custList');
+  if (!state.customers.length) { box.innerHTML = '<div class="empty">' + icon(IC.empty) + '<br>مفيش عملاء لسه.<br><button class="btn" type="button" id="emptyAdd" style="margin-top:12px">+ إضافة عميل</button></div>'; $('emptyAdd').onclick = function(){ custForm(null); }; return; }
+  box.innerHTML = list.length ? list.map(function(x){ return custItem(x.c, x.b); }).join('') : '<p class="empty">مفيش نتايج.</p>';
+  bindCustItems(box);
+}
+$('custSearch').addEventListener('input', renderCustList);
+Array.prototype.forEach.call(document.querySelectorAll('[data-sort]'), function(b){
+  b.onclick = function(){
+    custSort = b.getAttribute('data-sort');
+    Array.prototype.forEach.call(document.querySelectorAll('[data-sort]'), function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    renderCustList();
+  };
+});
+
+function custForm(c){
+  var isNew = !c;
+  openModal(isNew ? 'عميل جديد' : 'تعديل بيانات العميل',
+    '<label for="cfName">اسم العميل</label><input type="text" id="cfName" value="' + esc(c ? c.name : '') + '" aria-describedby="cfErr">' +
+    '<div class="err" id="cfErr" role="alert"></div>' +
+    '<label for="cfPhone">التليفون (اختياري)</label><input type="tel" id="cfPhone" dir="ltr" value="' + esc(c ? c.phone || '' : '') + '">' +
+    '<label for="cfNote">ملاحظات (اختياري)</label><textarea id="cfNote">' + esc(c ? c.note || '' : '') + '</textarea>',
+    [
+      {text: 'حفظ', id: 'cfSave', onClick: function(){
+        var name = $('cfName').value.trim();
+        if (!name) { $('cfErr').textContent = 'اكتب اسم العميل'; $('cfName').focus(); return; }
+        var dup = state.customers.some(function(x){ return x.name === name && (!c || x.id !== c.id); });
+        if (dup) { $('cfErr').textContent = 'فيه عميل بنفس الاسم'; $('cfName').focus(); return; }
+        if (isNew) { c = {id: uid(), name: name, phone: toEnDigits($('cfPhone').value.trim()), note: $('cfNote').value.trim(), createdAt: Date.now(), lastPrice: null}; state.customers.push(c); }
+        else { c.name = name; c.phone = toEnDigits($('cfPhone').value.trim()); c.note = $('cfNote').value.trim(); }
+        save(); closeModal(); toast(isNew ? 'تمت إضافة العميل' : 'تم حفظ التعديل');
+        if (isNew) show('cust', c.id); else RENDER[current.screen](current.arg);
+      }},
+      {text: 'إلغاء', cls: 'sec', onClick: closeModal}
+    ]);
+}
+
+// ===== كشف الحساب =====
+var filter = {from:'', to:''}, filterCust = null;
+function stmtRows(c){
+  var bal = 0, prev = 0, rows = [];
+  custEntries(c.id).forEach(function(e){
+    bal = r2(bal + TYPES[e.type].sign * e.amount);
+    if (filter.from && e.date < filter.from) { prev = bal; return; }
+    if (filter.to && e.date > filter.to) return;
+    rows.push({e: e, bal: bal});
+  });
+  var t = {w:0, plus:0, minus:0};
+  rows.forEach(function(r){ if (r.e.type === 'weigh') t.w += r.e.weight || 0; if (TYPES[r.e.type].sign > 0) t.plus += r.e.amount; else t.minus += r.e.amount; });
+  return {rows: rows, prev: prev, final: rows.length ? rows[rows.length - 1].bal : prev, tot: t};
+}
+RENDER.cust = function(cid){
+  var c = custById(cid);
+  if (!c) { stack = []; current = null; show('customers'); return; }
+  if (filterCust !== cid) { filter = {from:'', to:''}; filterCust = cid; $('fFrom').value = ''; $('fTo').value = ''; $('filterBox').hidden = true; $('tFilter').setAttribute('aria-expanded', 'false'); }
+  setTitle(c.name);
+  barAction('تعديل بيانات العميل', IC.edit, function(){ custMenu(c); });
+  var d = stmtRows(c), fil = !!(filter.from || filter.to);
+  $('custHero').innerHTML =
+    '<div class="top"><span class="av g" aria-hidden="true">' + esc(initials(c.name)) + '</span><div><div class="nm">' + esc(c.name) + '</div>' + (c.phone ? '<div class="ph num">' + esc(c.phone) + '</div>' : '') + '</div></div>' +
+    '<div class="bl"><div class="lbl">الباقي' + (fil ? ' (لحد آخر الفترة)' : '') + '</div><div class="big" aria-label="' + esc(fmt(d.final) + ' ' + cur()) + '"><span class="num">' + fmt(d.final) + '</span> <span style="font-size:15px">' + esc(cur()) + '</span></div></div>' +
+    '<div class="acts">' +
+      (c.phone ? '<button type="button" id="cCall">' + icon(IC.phone) + 'اتصال</button><button type="button" id="cWa">' + icon(IC.wa) + 'تذكير واتساب</button>' : '<button type="button" id="cAddPhone">' + icon(IC.phone) + 'إضافة تليفون</button>') +
+    '</div>';
+  if ($('cCall')) $('cCall').onclick = function(){ A.openUrl('tel:' + c.phone.replace(/[^\d+]/g, '')); };
+  if ($('cWa')) $('cWa').onclick = function(){ sendReminder(c); };
+  if ($('cAddPhone')) $('cAddPhone').onclick = function(){ custForm(c); };
+  $('custMini').innerHTML =
+    '<div>إجمالي الحساب<b class="num">' + fmt(d.tot.plus) + '</b></div>' +
+    '<div>السداد والخصم<b class="num">' + fmt(d.tot.minus) + '</b></div>' +
+    '<div>الوزن (طن)<b class="num">' + fmt(d.tot.w / 1000) + '</b></div>';
+  var view = state.settings.view;
+  $('tView').textContent = view === 'table' ? 'عرض بطاقات' : 'عرض جدول';
+  $('entT').textContent = 'الحركات (' + fmt(d.rows.length) + ')';
+  var box = $('entries');
+  if (!d.rows.length && !(fil && d.prev)) {
+    box.innerHTML = '<div class="empty">' + icon(IC.empty) + '<br>' + (fil ? 'مفيش حركات في الفترة دي.' : 'مفيش حركات لسه. ابدأ بـ «وزنة» أو «سداد».') + '</div>';
+    return;
+  }
+  if (view === 'table') {
+    var h = '<div class="tbl-wrap"><table class="t"><caption class="sr-only">كشف حساب ' + esc(c.name) + '</caption><thead><tr>' +
+      '<th scope="col">التاريخ</th><th scope="col">البيان</th><th scope="col">الوزن</th><th scope="col">السعر</th><th scope="col">الحساب</th><th scope="col">السداد</th><th scope="col">الباقي</th><th scope="col"><span class="sr-only">فتح</span></th></tr></thead><tbody>';
+    if (filter.from) h += '<tr class="prev"><td></td><td class="st">رصيد سابق</td><td></td><td></td><td></td><td></td><td><span class="num">' + fmt(d.prev) + '</span></td><td></td></tr>';
+    d.rows.forEach(function(r){
+      var e = r.e, plus = TYPES[e.type].sign > 0;
+      h += '<tr class="' + (plus ? '' : 'p') + '"><td>' + fmtDate(e.date) + '</td><td class="st">' + esc(e.statement || TYPES[e.type].name) + '</td>' +
+        '<td>' + (e.type === 'weigh' ? '<span class="num">' + fmt(e.weight) + '</span>' : '') + '</td>' +
+        '<td>' + (e.type === 'weigh' ? '<span class="num">' + fmt(e.price) + '</span>' : '') + '</td>' +
+        '<td>' + (plus ? '<span class="num">' + fmt(e.amount) + '</span>' : '') + '</td>' +
+        '<td>' + (!plus ? '<span class="num">' + fmt(e.amount) + '</span>' : '') + '</td>' +
+        '<td><b class="num">' + fmt(r.bal) + '</b></td>' +
+        '<td><button type="button" class="lnk" data-id="' + esc(e.id) + '" aria-label="' + esc('فتح ' + entrySpeech(e, r.bal)) + '">فتح</button></td></tr>';
+    });
+    box.innerHTML = h + '</tbody></table></div>';
+  } else {
+    var hc = filter.from ? '<div class="banner g"><span class="grow">رصيد سابق: <b class="num">' + fmt(d.prev) + '</b></span></div>' : '';
+    hc += '<div class="list" role="list">' + d.rows.slice().reverse().map(function(r){
+      var e = r.e, t = TYPES[e.type];
+      var det = e.type === 'weigh'
+        ? '<span class="num">' + fmt(e.weight) + '</span> كيلو × <span class="num">' + fmt(e.price) + '</span> = <b class="num">' + fmt(e.amount) + '</b>'
+        : '<b class="num">' + fmt(e.amount) + '</b> ' + esc(cur()) + (e.method ? ' — ' + esc(e.method) : '') + (e.receiptNo ? ' — إيصال ' + arDigits(e.receiptNo) : '');
+      return '<div role="listitem"><button type="button" class="ent ' + (e.type === 'weigh' ? 'w' : (e.type === 'charge' ? 'c' : '')) + '" data-id="' + esc(e.id) + '" aria-label="' + esc(entrySpeech(e, r.bal)) + '">' +
+        '<span class="top"><span><span class="chip ' + t.chip + '">' + t.name + '</span> <b>' + esc(e.statement || t.name) + '</b></span><span class="muted small">' + fmtDate(e.date) + '</span></span>' +
+        '<div class="det">' + det + (e.note ? '<br>' + esc(e.note) : '') + '</div>' +
+        '<div class="bal"><span class="muted">الباقي</span><b class="num">' + fmt(r.bal) + '</b></div></button></div>';
+    }).join('') + '</div>';
+    box.innerHTML = hc;
+  }
+  Array.prototype.forEach.call(box.querySelectorAll('[data-id]'), function(el){ el.onclick = function(){ entryForm(cid, entById(el.getAttribute('data-id'))); }; });
+};
+function entrySpeech(e, bal){
+  var s = dateWords(e.date) + '، ' + TYPES[e.type].name + '، ' + (e.statement || '');
+  if (e.type === 'weigh') s += '، الوزن ' + fmt(e.weight) + ' كيلو، السعر ' + fmt(e.price) + '، الحساب ' + fmt(e.amount);
+  else s += '، المبلغ ' + fmt(e.amount) + (e.method ? '، ' + e.method : '') + (e.receiptNo ? '، إيصال رقم ' + e.receiptNo : '');
+  if (e.note) s += '، ملاحظة: ' + e.note;
+  return s + '، الباقي ' + fmt(bal) + ' ' + cur();
+}
+$('addWeigh').onclick = function(){ entryForm(current.arg, null, 'weigh'); };
+$('addPay').onclick = function(){ entryForm(current.arg, null, 'pay'); };
+$('addOther').onclick = function(){ entryForm(current.arg, null, 'discount'); };
+$('tView').onclick = function(){ state.settings.view = state.settings.view === 'table' ? 'cards' : 'table'; save(); RENDER.cust(current.arg); toast(state.settings.view === 'table' ? 'عرض الجدول' : 'عرض البطاقات'); };
+$('tFilter').onclick = function(){ var b = $('filterBox'); b.hidden = !b.hidden; this.setAttribute('aria-expanded', b.hidden ? 'false' : 'true'); if (!b.hidden) $('fFrom').focus(); };
+$('fFrom').onchange = $('fTo').onchange = function(){
+  filter.from = $('fFrom').value; filter.to = $('fTo').value;
+  if (filter.from && filter.to && filter.from > filter.to) toast('تاريخ «من» بعد تاريخ «إلى»');
+  RENDER.cust(current.arg); announce('تم تطبيق الفلترة');
+};
+$('fClear').onclick = function(){ $('fFrom').value = ''; $('fTo').value = ''; filter = {from:'', to:''}; RENDER.cust(current.arg); toast('تم إلغاء الفلترة'); };
+$('tPrint').onclick = function(){ var c = custById(current.arg); A.printHtml('كشف حساب ' + c.name, statementHtml(c)); };
+$('tExcel').onclick = function(){ exportCsv(custById(current.arg)); };
+$('tShare').onclick = function(){
+  var c = custById(current.arg), d = stmtRows(c), o = state.settings.owner;
+  var lines = [(o.biz ? o.biz + '\n' : '') + 'كشف حساب: ' + c.name];
+  if (filter.from || filter.to) lines.push('الفترة: ' + (filter.from ? fmtDate(filter.from) : 'البداية') + ' إلى ' + (filter.to ? fmtDate(filter.to) : 'النهاية'));
+  if (filter.from) lines.push('رصيد سابق: ' + fmt(d.prev));
+  lines.push('------------------');
+  d.rows.forEach(function(r){
+    var e = r.e, s = fmtDate(e.date) + ' | ' + (e.statement || TYPES[e.type].name) + ' | ';
+    if (e.type === 'weigh') s += fmt(e.weight) + ' × ' + fmt(e.price) + ' = ' + fmt(e.amount);
+    else s += TYPES[e.type].name + ' ' + fmt(e.amount);
+    lines.push(s + ' | الباقي ' + fmt(r.bal));
+  });
+  lines.push('------------------');
+  lines.push('الباقي: ' + fmt(d.final) + ' ' + cur());
+  A.shareText('مشاركة كشف الحساب', lines.join('\n'));
+};
+function waPhone(p){
+  p = toEnDigits(p).replace(/[^\d]/g, '');
+  if (p.indexOf('00') === 0) p = p.slice(2);
+  else if (p.length === 11 && p.charAt(0) === '0') p = '2' + p;
+  return p;
+}
+function sendReminder(c){
+  var o = state.settings.owner, b = balanceOf(c.id);
+  var msg = 'السلام عليكم أ/ ' + c.name + '\n' + 'رصيد حسابكم' + (o.biz ? ' لدى ' + o.biz : '') + ' حتى ' + fmtDate(todayISO()) + ':\n' + fmt(b) + ' ' + cur() + '\n' + (o.foot || 'شكرًا لحسن تعاملكم.');
+  A.openUrl('https://wa.me/' + waPhone(c.phone) + '?text=' + encodeURIComponent(msg));
+}
+function custMenu(c){
+  openModal(c.name, '', [
+    {text: 'تعديل البيانات', onClick: function(){ closeModal(); custForm(c); }},
+    {text: 'حذف العميل', cls: 'danger', onClick: function(){
+      closeModal();
+      var n = custEntries(c.id).length;
+      confirmBox('حذف العميل', 'هيتمسح العميل «' + esc(c.name) + '» و' + fmt(n) + ' حركة بتاعته نهائيًا. متأكد؟', 'حذف نهائي', function(){
+        state.entries = state.entries.filter(function(e){ return e.customerId !== c.id; });
+        state.customers = state.customers.filter(function(x){ return x.id !== c.id; });
+        save(); toast('تم حذف العميل'); stack = []; current = null; show('customers');
+      }, true);
+    }},
+    {text: 'إلغاء', cls: 'sec', onClick: closeModal}
+  ]);
+}
+
+// ===== نموذج الحركة =====
+function entryForm(cid, e, type){
+  var c = custById(cid); if (!c) return;
+  var isNew = !e;
+  type = e ? e.type : type;
+  var methodOpts = METHODS.map(function(m){ return '<option' + (e && e.method === m ? ' selected' : '') + '>' + m + '</option>'; }).join('');
+  var body = '<fieldset style="border:none;padding:0;margin:0"><legend class="sr-only">نوع الحركة</legend><div class="seg">' +
+    ['weigh','pay','discount','charge'].map(function(t){
+      return '<label><input type="radio" name="efType" value="' + t + '"' + (t === type ? ' checked' : '') + '><span>' + TYPES[t].name + '</span></label>';
+    }).join('') + '</div></fieldset><p class="hint" id="efTypeHint"></p>' +
+    '<div class="row2"><div><label for="efDate">التاريخ</label><input type="date" id="efDate" value="' + (e ? e.date : todayISO()) + '"></div>' +
+    '<div id="efMethodBox"><label for="efMethod">طريقة الدفع</label><select id="efMethod">' + methodOpts + '</select></div></div>' +
+    '<label for="efSt">البيان</label><input type="text" id="efSt" value="' + esc(e ? e.statement : '') + '">' +
+    '<div id="efWeighBox"><div class="row2">' +
+      '<div><label for="efW">الوزن (كيلو)</label><input type="text" inputmode="decimal" id="efW" dir="ltr" value="' + (e && e.type === 'weigh' ? e.weight : '') + '"></div>' +
+      '<div><label for="efP">السعر (للطن)</label><input type="text" inputmode="decimal" id="efP" dir="ltr" value="' + (e && e.type === 'weigh' ? e.price : (c.lastPrice || '')) + '"></div>' +
+    '</div><label class="chk"><input type="checkbox" id="efManual"' + (e && e.type === 'weigh' && e.manual ? ' checked' : '') + '> تعديل «الحساب» يدوي</label></div>' +
+    '<label for="efAmt" id="efAmtLbl">المبلغ</label><input type="text" inputmode="decimal" id="efAmt" dir="ltr" value="' + (e ? e.amount : '') + '">' +
+    '<div class="calc" id="efCalc" aria-live="polite"></div>' +
+    '<label for="efNote">ملاحظة (اختياري)</label><input type="text" id="efNote" value="' + esc(e ? e.note || '' : '') + '">' +
+    '<div class="err" id="efErr" role="alert"></div>';
+  var btns = [{text: 'حفظ', onClick: doSave}];
+  if (!isNew) {
+    btns.push({text: 'إيصال', cls: 'dark', onClick: function(){ closeModal(); printReceipt(e); }});
+    btns.push({text: 'حذف', cls: 'danger', onClick: function(){
+      confirmBox('حذف الحركة', 'هتتمسح الحركة دي نهائيًا. متأكد؟', 'حذف', function(){
+        state.entries = state.entries.filter(function(x){ return x.id !== e.id; }); save(); toast('تم حذف الحركة'); RENDER.cust(cid);
+      }, true);
+    }});
+  } else btns.push({text: 'إلغاء', cls: 'sec', onClick: closeModal});
+  openModal((isNew ? 'حركة جديدة — ' : 'تعديل حركة — ') + c.name, body, btns);
+
+  var defSt = {weigh: c.name, pay: 'تحويل', discount: 'خصم', charge: 'رصيد سابق'};
+  function curType(){ var r = document.querySelector('input[name=efType]:checked'); return r ? r.value : 'weigh'; }
+  function refresh(changedType){
+    var t = curType(), isW = t === 'weigh';
+    Array.prototype.forEach.call(document.querySelectorAll('input[name=efType]'), function(r){ r.parentNode.classList.toggle('on', r.checked); });
+    $('efWeighBox').hidden = !isW;
+    $('efMethodBox').style.visibility = t === 'pay' ? 'visible' : 'hidden';
+    var manual = $('efManual').checked;
+    $('efAmt').readOnly = isW && !manual;
+    $('efAmtLbl').textContent = isW ? 'الحساب' : 'المبلغ';
+    $('efTypeHint').textContent = TYPES[t].sign > 0 ? 'الحركة دي بتزوّد الباقي على العميل.' : 'الحركة دي بتقلّل الباقي على العميل.';
+    if (changedType) {
+      var stv = $('efSt').value.trim();
+      if (!stv || Object.keys(defSt).some(function(k){ return defSt[k] === stv; })) $('efSt').value = defSt[t];
+    }
+    var calc = '';
+    if (isW) {
+      var w = parseNum($('efW').value), p = parseNum($('efP').value);
+      if (!isNaN(w) && !isNaN(p)) {
+        var a = calcAmount(w, p);
+        if (!manual) $('efAmt').value = a;
+        calc = 'الحساب = <span class="num">' + fmt(w) + '</span> × <span class="num">' + fmt(p) + '</span> ÷ ١٠٠٠ = <b class="num">' + fmt(a) + '</b>' + (manual ? '<br>(إنت كاتب الحساب يدوي)' : '');
+      } else if (!manual) $('efAmt').value = '';
+    }
+    var amt = parseNum($('efAmt').value);
+    var curBal = balanceOf(cid) - (e ? TYPES[e.type].sign * e.amount : 0);
+    if (!isNaN(amt)) calc += (calc ? '<br>' : '') + 'الباقي بعد الحركة: <b class="num">' + fmt(curBal + TYPES[t].sign * amt) + '</b>';
+    $('efCalc').innerHTML = calc; $('efCalc').hidden = !calc;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('input[name=efType]'), function(r){
+    r.onchange = function(){ refresh(true); };
+    r.onfocus = function(){ r.parentNode.classList.add('foc'); };
+    r.onblur = function(){ r.parentNode.classList.remove('foc'); };
+  });
+  ['efW','efP','efAmt'].forEach(function(id){ $(id).addEventListener('input', function(){ refresh(false); }); });
+  $('efManual').onchange = function(){ refresh(false); };
+  if (isNew) $('efSt').value = defSt[type];
+  refresh(false);
+
+  function doSave(){
+    var t = curType(), err = '', focus = null;
+    var date = $('efDate').value;
+    var w = parseNum($('efW').value), p = parseNum($('efP').value), amt = parseNum($('efAmt').value);
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) { err = 'اختار التاريخ'; focus = 'efDate'; }
+    else if (t === 'weigh' && (isNaN(w) || w <= 0)) { err = 'اكتب الوزن صح (رقم أكبر من صفر)'; focus = 'efW'; }
+    else if (t === 'weigh' && (isNaN(p) || p <= 0)) { err = 'اكتب السعر صح (رقم أكبر من صفر)'; focus = 'efP'; }
+    else if (isNaN(amt) || amt < 0) { err = 'اكتب المبلغ صح'; focus = 'efAmt'; }
+    else if (amt === 0 && t !== 'weigh') { err = 'المبلغ لازم يكون أكبر من صفر'; focus = 'efAmt'; }
+    if (err) { $('efErr').textContent = err; $(focus).focus(); return; }
+    var obj = e || {id: uid(), customerId: cid, createdAt: Date.now(), seq: nextSeq()};
+    obj.type = t; obj.date = date; obj.statement = $('efSt').value.trim(); obj.note = $('efNote').value.trim();
+    obj.amount = r2(amt);
+    if (t === 'weigh') { obj.weight = w; obj.price = p; obj.manual = $('efManual').checked; c.lastPrice = p; }
+    else { delete obj.weight; delete obj.price; delete obj.manual; }
+    if (t === 'pay') { obj.method = $('efMethod').value; if (!obj.receiptNo) obj.receiptNo = state.settings.nextReceipt++; }
+    else delete obj.method;
+    obj.updatedAt = Date.now();
+    if (isNew) state.entries.push(obj);
+    save(); closeModal();
+    RENDER.cust(cid);
+    if (isNew && t === 'pay') {
+      openModal('تم حفظ السداد ✓', '<p>إيصال رقم <b>' + arDigits(obj.receiptNo) + '</b> بمبلغ <b class="num">' + fmt(obj.amount) + '</b> ' + esc(cur()) + '.<br>الباقي دلوقتي: <b class="num">' + fmt(balanceOf(cid)) + '</b></p>', [
+        {text: 'طباعة الإيصال', onClick: function(){ closeModal(); printReceipt(obj); }},
+        {text: 'تمام', cls: 'sec', onClick: closeModal}
+      ]);
+    } else toast(isNew ? 'تم الحفظ — الباقي ' + fmt(balanceOf(cid)) : 'تم حفظ التعديل');
+  }
+}
+
+// ===== مستندات الطباعة =====
+var DOC_CSS = '*{box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}' +
+  '@page{size:A4;margin:12mm}body{font-family:"Noto Naskh Arabic","Noto Sans Arabic",Tahoma,sans-serif;color:#15171c;font-size:12.5px;margin:0}' +
+  '.hdr{display:flex;align-items:center;gap:14px;padding-bottom:10px;border-bottom:3px solid #d6ab3a}' +
+  '.hdr img{max-height:72px;max-width:130px;object-fit:contain}.hdr .b{flex:1}.biz{font-size:21px;font-weight:800}.sub{color:#5d636c;font-size:12px}' +
+  '.title{margin:14px 0 10px;background:linear-gradient(135deg,#2b2f38,#15171c);color:#f5dc93;border-radius:10px;padding:9px 14px;display:flex;justify-content:space-between;align-items:center}' +
+  '.title h1{margin:0;font-size:18px}.info{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px;margin-bottom:10px;font-size:13px}.info b{color:#7a5b0c}' +
+  'table{width:100%;border-collapse:collapse}th{background:#eceef1;border-bottom:2px solid #d6ab3a;padding:7px 4px;font-size:12.5px}' +
+  'td{border-bottom:1px solid #e1e4e8;padding:6px 4px;text-align:center}td.s{text-align:right}tr.p td{background:#f7f8fa}tr.pv td{background:#fbf4e1;font-weight:700}' +
+  '.tot{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.tot div{border:1px solid #d9dce1;border-radius:10px;padding:8px;text-align:center;font-size:12px;color:#5d636c}.tot b{display:block;font-size:15px;color:#15171c}' +
+  '.tot .g{background:#fbf4e1;border-color:#d6ab3a}.words{margin-top:10px;padding:8px 12px;border-right:4px solid #d6ab3a;background:#f7f8fa;font-weight:700}' +
+  '.sign{display:flex;justify-content:space-between;margin-top:36px}.sign div{width:40%;text-align:center;border-top:1px dashed #9aa0a8;padding-top:6px;color:#5d636c}' +
+  '.foot{margin-top:18px;text-align:center;color:#5d636c;font-size:11.5px;border-top:1px solid #e1e4e8;padding-top:8px}' +
+  '.rc{border:2px solid #d6ab3a;border-radius:16px;padding:16px;position:relative}.rc .row{display:flex;gap:10px;margin:9px 0;align-items:baseline}.rc .row span{color:#5d636c;min-width:110px}.rc .row b{flex:1;border-bottom:1px dotted #9aa0a8;padding-bottom:2px}' +
+  '.amtbox{display:inline-block;background:linear-gradient(135deg,#f5dc93,#d6ab3a);color:#15171c;font-size:20px;font-weight:800;border-radius:10px;padding:6px 16px}' +
+  '.cut{margin:22px 0;border-top:2px dashed #c9cdd3;text-align:center;color:#9aa0a8;font-size:11px}';
+function docHeader(){
+  var o = state.settings.owner;
+  return '<div class="hdr">' + (o.logo ? '<img src="' + esc(o.logo) + '" alt="">' : '') +
+    '<div class="b"><div class="biz">' + esc(o.biz || 'حساباتي') + '</div>' +
+    (o.name ? '<div class="sub">' + esc(o.name) + '</div>' : '') +
+    (o.phone ? '<div class="sub">ت: <span dir="ltr">' + esc(o.phone) + '</span></div>' : '') +
+    (o.addr ? '<div class="sub">' + esc(o.addr) + '</div>' : '') + '</div></div>';
+}
+function docFoot(){ var o = state.settings.owner; return '<div class="foot">' + (o.foot ? esc(o.foot) + '<br>' : '') + 'تم الإصدار ' + fmtDate(todayISO()) + ' — حساباتي</div>'; }
+function statementHtml(c){
+  var d = stmtRows(c);
+  var h = '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>كشف حساب</title><style>' + DOC_CSS + '</style></head><body>' + docHeader() +
+    '<div class="title"><h1>كشف حساب</h1><span>' + fmtDate(todayISO()) + '</span></div>' +
+    '<div class="info"><div>العميل: <b>' + esc(c.name) + '</b></div>' + (c.phone ? '<div>التليفون: <b dir="ltr">' + esc(c.phone) + '</b></div>' : '<div></div>') +
+    '<div>الفترة: <b>' + (filter.from ? fmtDate(filter.from) : 'من البداية') + ' — ' + (filter.to ? fmtDate(filter.to) : 'حتى اليوم') + '</b></div><div>عدد الحركات: <b>' + fmt(d.rows.length) + '</b></div></div>' +
+    '<table><thead><tr><th>م</th><th>التاريخ</th><th>البيان</th><th>الوزن</th><th>السعر</th><th>الحساب</th><th>السداد</th><th>الباقي</th></tr></thead><tbody>';
+  if (filter.from) h += '<tr class="pv"><td></td><td></td><td class="s">رصيد سابق</td><td></td><td></td><td></td><td></td><td>' + fmt(d.prev) + '</td></tr>';
+  d.rows.forEach(function(r, i){
+    var e = r.e, plus = TYPES[e.type].sign > 0;
+    h += '<tr class="' + (plus ? '' : 'p') + '"><td>' + arDigits(i + 1) + '</td><td>' + fmtDate(e.date) + '</td><td class="s">' + esc(e.statement || TYPES[e.type].name) + (e.method ? ' (' + esc(e.method) + ')' : '') + '</td>' +
+      '<td>' + (e.type === 'weigh' ? fmt(e.weight) : '') + '</td><td>' + (e.type === 'weigh' ? fmt(e.price) : '') + '</td>' +
+      '<td>' + (plus ? fmt(e.amount) : '') + '</td><td>' + (plus ? '' : fmt(e.amount)) + '</td><td><b>' + fmt(r.bal) + '</b></td></tr>';
+  });
+  h += '</tbody></table><div class="tot">' +
+    '<div>إجمالي الوزن (كيلو)<b>' + fmt(d.tot.w) + '</b></div><div>إجمالي الحساب<b>' + fmt(d.tot.plus) + '</b></div>' +
+    '<div>إجمالي السداد والخصم<b>' + fmt(d.tot.minus) + '</b></div><div class="g">الباقي المستحق<b>' + fmt(d.final) + ' ' + esc(cur()) + '</b></div></div>' +
+    '<div class="words">' + (d.final < 0 ? 'رصيد لصالح العميل: ' : 'الباقي: ') + tafqeet(d.final) + '</div>' +
+    '<div class="sign"><div>توقيع العميل</div><div>توقيع المسؤول</div></div>' + docFoot() + '</body></html>';
+  return h;
+}
+function receiptBlock(e, copyLabel){
+  var c = custById(e.customerId), before = balanceBefore(e), after = r2(before + TYPES[e.type].sign * e.amount);
+  var isPay = TYPES[e.type].sign < 0;
+  return '<div class="rc"><div class="title" style="margin-top:0"><h1>' + (isPay ? 'إيصال استلام نقدية' : 'إشعار ' + TYPES[e.type].name) + '</h1><span>رقم ' + arDigits(e.receiptNo || '-') + (copyLabel ? ' — ' + copyLabel : '') + '</span></div>' +
+    '<div class="row"><span>التاريخ</span><b>' + fmtDate(e.date) + '</b></div>' +
+    '<div class="row"><span>' + (isPay ? 'استلمنا من السيد/' : 'السيد/') + '</span><b>' + esc(c ? c.name : '') + '</b></div>' +
+    (e.type === 'weigh' ? '<div class="row"><span>الوزن × السعر</span><b>' + fmt(e.weight) + ' كيلو × ' + fmt(e.price) + '</b></div>' : '') +
+    '<div class="row"><span>مبلغ وقدره</span><b><span class="amtbox">' + fmt(e.amount) + ' ' + esc(cur()) + '</span></b></div>' +
+    '<div class="row"><span>فقط</span><b>' + tafqeet(e.amount).replace(/^فقط /, '') + '</b></div>' +
+    '<div class="row"><span>وذلك عن</span><b>' + esc(e.statement || TYPES[e.type].name) + (e.note ? ' — ' + esc(e.note) : '') + '</b></div>' +
+    (e.method ? '<div class="row"><span>طريقة الدفع</span><b>' + esc(e.method) + '</b></div>' : '') +
+    '<div class="row"><span>الرصيد قبل</span><b>' + fmt(before) + '</b></div>' +
+    '<div class="row"><span>الرصيد بعد</span><b>' + fmt(after) + '</b></div>' +
+    '<div class="sign" style="margin-top:28px"><div>' + (isPay ? 'المستلم' : 'المسؤول') + '</div><div>العميل</div></div></div>';
+}
+function receiptHtml(e){
+  return '<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><title>إيصال</title><style>' + DOC_CSS + '</style></head><body>' +
+    docHeader() + '<div style="height:12px"></div>' + receiptBlock(e, 'الأصل') + '<div class="cut">✂ - - - - - - - - - - - - - - - - - - - - - -</div>' + docHeader() + '<div style="height:12px"></div>' + receiptBlock(e, 'صورة') + docFoot() + '</body></html>';
+}
+function printReceipt(e){
+  if (!e.receiptNo) { e.receiptNo = state.settings.nextReceipt++; save(); }
+  var c = custById(e.customerId);
+  A.printHtml('إيصال ' + e.receiptNo + ' - ' + (c ? c.name : ''), receiptHtml(e));
+}
+
+function csvCell(v){ v = v == null ? '' : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+function exportCsv(c){
+  var d = stmtRows(c);
+  var out = [['التاريخ','النوع','البيان','الوزن','السعر','الحساب','السداد','الباقي','طريقة الدفع','رقم الإيصال','ملاحظة']];
+  if (filter.from) out.push([filter.from, '', 'رصيد سابق', '', '', '', '', d.prev, '', '', '']);
+  d.rows.forEach(function(r){
+    var e = r.e, plus = TYPES[e.type].sign > 0;
+    out.push([e.date, TYPES[e.type].name, e.statement || '', e.type === 'weigh' ? e.weight : '', e.type === 'weigh' ? e.price : '',
+      plus ? e.amount : '', plus ? '' : e.amount, r.bal, e.method || '', e.receiptNo || '', e.note || '']);
+  });
+  var csv = '﻿' + out.map(function(r){ return r.map(csvCell).join(','); }).join('\r\n');
+  pendingSave = 'csv';
+  A.saveFile('كشف-' + c.name.replace(/[\\\/:*?"<>|]/g, '_') + '-' + todayISO() + '.csv', 'text/csv', csv);
+}
+
+// ===== النسخ الاحتياطي =====
+function checksum(str){
+  var h = 0x811c9dc5;
+  for (var i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = (h + ((h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24))) >>> 0; }
+  return ('0000000' + h.toString(16)).slice(-8);
+}
+var pendingSave = null;
+RENDER.backup = function(){
+  setTitle('النسخ الاحتياطي');
+  var lb = state.settings.lastBackup;
+  $('lastBackupTxt').innerHTML = lb ? 'آخر نسخة: <b>' + fmtDate(isoOf(new Date(lb))) + '</b>' : 'لسه ما اتاخدتش أي نسخة';
+  $('undoRestore').hidden = !localStorage.getItem(PREV_KEY);
+};
+function doBackup(){
+  var data = JSON.stringify({format: state.format, settings: state.settings, customers: state.customers, entries: state.entries});
+  var file = JSON.stringify({app: APP_ID, kind: 'backup', appVersion: VERSION, createdAt: new Date().toISOString(),
+    counts: {customers: state.customers.length, entries: state.entries.length}, checksum: checksum(data), data: JSON.parse(data)});
+  var d = new Date();
+  pendingSave = 'backup';
+  A.saveFile('حساباتي-نسخة-' + isoOf(d) + '-' + pad(d.getHours()) + pad(d.getMinutes()) + '.json', 'application/json', file);
+}
+$('doBackup').onclick = doBackup;
+window.onFileSaved = function(ok, msg){
+  var kind = pendingSave; pendingSave = null;
+  if (ok && kind === 'backup') { state.settings.lastBackup = Date.now(); save(); toast('تم حفظ النسخة الاحتياطية'); if (current && current.screen === 'backup') RENDER.backup(); }
+  else if (ok) toast('تم حفظ الملف');
+  else toast(msg || 'لم يتم الحفظ');
+};
+$('doRestore').onclick = function(){ A.openFile(); };
+window.onFileOpened = function(ok, text){
+  if (!ok) { toast(text || 'تم الإلغاء'); return; }
+  var f;
+  try { f = JSON.parse(text); } catch(e) { toast('الملف ده مش نسخة احتياطية صالحة'); return; }
+  if (!f || f.app !== APP_ID || !validData(f.data)) { toast('الملف ده مش نسخة احتياطية من «حساباتي»'); return; }
+  var sumOk = checksum(JSON.stringify(f.data)) === f.checksum;
+  var d = fixData(f.data);
+  var when = f.createdAt ? fmtDate(isoOf(new Date(f.createdAt))) : 'غير معروف';
+  confirmBox('استرجاع نسخة',
+    'تاريخ النسخة: ' + when + '<br>العملاء: ' + fmt(d.customers.length) + '<br>الحركات: ' + fmt(d.entries.length) +
+    (sumOk ? '' : '<br><b style="color:var(--red)">تحذير: الملف شكله متعدّل أو ناقص.</b>') +
+    '<br><br>البيانات الحالية (' + fmt(state.customers.length) + ' عميل، ' + fmt(state.entries.length) + ' حركة) هتتبدّل بالنسخة دي. متأكد؟',
+    'استرجاع', function(){
+      try { localStorage.setItem(PREV_KEY, JSON.stringify(state)); } catch(e) {}
+      var keepPin = state.settings.pin;
+      state = d; state.settings.pin = keepPin;
+      save(); toast('تم الاسترجاع بنجاح'); stack = []; current = null; show('home');
+    }, true);
+};
+$('undoRestore').onclick = function(){
+  confirmBox('رجوع للبيانات القديمة', 'هترجع البيانات اللي كانت موجودة قبل آخر استرجاع، والبيانات الحالية هتتبدّل. متأكد؟', 'رجوع', function(){
+    try {
+      var d = JSON.parse(localStorage.getItem(PREV_KEY));
+      if (!validData(d)) throw 0;
+      var curS = JSON.stringify(state);
+      state = fixData(d); save(); localStorage.setItem(PREV_KEY, curS);
+      toast('تم الرجوع للبيانات القديمة'); stack = []; current = null; show('home');
+    } catch(e) { toast('مفيش بيانات قديمة صالحة'); }
+  }, true);
+};
+
+// ===== الإعدادات =====
+var verTaps = 0, verTapT;
+RENDER.settings = function(){
+  setTitle('الإعدادات');
+  var o = state.settings.owner;
+  $('oBiz').value = o.biz; $('oName').value = o.name; $('oPhone').value = o.phone; $('oAddr').value = o.addr; $('oFoot').value = o.foot;
+  showLogo();
+  $('setRound').value = state.settings.rounding; $('setView').value = state.settings.view; $('setDigits').value = state.settings.digits; $('setCur').value = cur();
+  $('pinState').textContent = state.settings.pin ? 'قفل البرنامج برقم سري: شغّال' : 'قفل البرنامج برقم سري: مقفول';
+  $('pinBtn').textContent = state.settings.pin ? 'تغيير الرقم' : 'تشغيل القفل';
+  $('pinOffRow').hidden = !state.settings.pin;
+  $('setLic').textContent = licText(getLic());
+  $('aboutVer').textContent = 'حساباتي — الإصدار ' + VERSION;
+};
+function showLogo(){
+  var l = state.settings.owner.logo;
+  $('logoPrev').style.backgroundImage = l ? 'url("' + l + '")' : 'none';
+  $('logoPrev').setAttribute('aria-label', l ? 'الشعار الحالي' : 'مفيش شعار');
+  $('logoDel').hidden = !l;
+}
+$('oSave').onclick = function(){
+  var o = state.settings.owner;
+  o.biz = $('oBiz').value.trim(); o.name = $('oName').value.trim(); o.phone = toEnDigits($('oPhone').value.trim()); o.addr = $('oAddr').value.trim(); o.foot = $('oFoot').value.trim();
+  save(); toast('تم حفظ بيانات النشاط');
+};
+$('logoPick').onclick = function(){ if (has('pickImage')) A.pickImage(); };
+window.onImagePicked = function(ok, data){
+  if (!ok) { toast(data || 'تم الإلغاء'); return; }
+  if (!/^data:image\//.test(data)) { toast('الصورة مش مظبوطة'); return; }
+  state.settings.owner.logo = data; save(); showLogo(); toast('تم حفظ الشعار');
+};
+$('logoDel').onclick = function(){ state.settings.owner.logo = ''; save(); showLogo(); toast('تم حذف الشعار'); $('logoPick').focus(); };
+$('setRound').onchange = function(){ state.settings.rounding = this.value; save(); toast('تم الحفظ — بيتطبّق على الحركات الجديدة'); };
+$('setView').onchange = function(){ state.settings.view = this.value; save(); toast('تم الحفظ'); };
+$('setDigits').onchange = function(){ state.settings.digits = this.value; save(); toast('تم الحفظ'); };
+$('setCur').onchange = function(){ state.settings.currency = this.value.trim() || 'جنيه'; save(); toast('تم الحفظ'); };
+$('pinBtn').onclick = function(){
+  openModal(state.settings.pin ? 'تغيير الرقم السري' : 'قفل البرنامج برقم سري',
+    '<p class="muted" style="margin-top:0">لو نسيته، تقدر تفتح بمفتاح التفعيل.</p>' +
+    '<label for="pn1">الرقم السري (٤ أرقام أو أكتر)</label><input type="password" id="pn1" inputmode="numeric" dir="ltr" autocomplete="off">' +
+    '<label for="pn2">اكتبه تاني للتأكيد</label><input type="password" id="pn2" inputmode="numeric" dir="ltr" autocomplete="off" aria-describedby="pnErr"><div class="err" id="pnErr" role="alert"></div>',
+    [{text:'حفظ', onClick: function(){
+        var a = toEnDigits($('pn1').value), b = toEnDigits($('pn2').value);
+        if (!/^\d{4,8}$/.test(a)) { $('pnErr').textContent = 'الرقم السري لازم يكون من ٤ لـ ٨ أرقام'; $('pn1').focus(); return; }
+        if (a !== b) { $('pnErr').textContent = 'الرقمين مش زي بعض'; $('pn2').focus(); return; }
+        state.settings.pin = pinHash(a); unlocked = true; save(); closeModal(); toast('تم تشغيل القفل'); RENDER.settings();
+      }}, {text:'إلغاء', cls:'sec', onClick: closeModal}]);
+};
+$('pinOff').onclick = function(){ confirmBox('إلغاء القفل', 'البرنامج هيفتح من غير رقم سري. متأكد؟', 'إلغاء القفل', function(){ state.settings.pin = null; save(); toast('تم إلغاء القفل'); RENDER.settings(); }); };
+$('newKeyBtn').onclick = function(){
+  openModal('مفتاح تفعيل جديد',
+    '<p style="margin-top:0">لو معاك مفتاح جديد (تجديد أو تحويل لنهائي) اكتبه هنا.</p>' +
+    '<label for="nkKey">مفتاح التفعيل</label><input type="text" id="nkKey" dir="ltr" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="XXXX-XXXX-XXXX-XXXX" aria-describedby="nkErr"><div class="err" id="nkErr" role="alert"></div>',
+    [{text: 'تفعيل', onClick: function(){
+        var k = $('nkKey').value.trim();
+        if (!k) { $('nkErr').textContent = 'اكتب المفتاح'; $('nkKey').focus(); return; }
+        var r = tryActivate(k);
+        if (!r.ok) { $('nkErr').textContent = r.msg; $('nkKey').focus(); return; }
+        closeModal(); toast('تم — ' + licText(r.license)); RENDER.settings();
+      }}, {text: 'إلغاء', cls: 'sec', onClick: closeModal}]);
+};
+// لوحة المطوّر: اضغط على سطر الإصدار ٧ مرات
+$('aboutVer').onclick = function(){
+  verTaps++; clearTimeout(verTapT); verTapT = setTimeout(function(){ verTaps = 0; }, 2500);
+  if (verTaps < 7) return;
+  verTaps = 0;
+  openModal('لوحة المطوّر', '<label for="dvP">كلمة سر المطوّر</label><input type="password" id="dvP" autocomplete="off" dir="ltr" aria-describedby="dvErr"><div class="err" id="dvErr" role="alert"></div>',
+    [{text:'دخول', onClick: function(){
+        if (has('checkDevPass') && A.checkDevPass($('dvP').value)) { closeModal(); show('dev'); }
+        else { $('dvErr').textContent = 'كلمة السر غلط'; $('dvP').focus(); }
+      }}, {text:'إلغاء', cls:'sec', onClick: closeModal}]);
+};
+
+// ===== لوحة المطوّر =====
+var lastUpd = null;
+RENDER.dev = function(){
+  setTitle('لوحة المطوّر');
+  var u = {}; try { u = JSON.parse(A.getUpdateInfo()); } catch(e) {}
+  var ota = u.source === 'ota';
+  $('devVer').textContent = VERSION;
+  $('devPills').innerHTML = '<span class="pill">APK <b class="num">' + esc(u.nativeName || '') + '</b></span>' +
+    '<span class="pill">الواجهة رقم <b class="num">' + esc(u.loadedBuild) + '</b></span>' +
+    '<span class="pill">' + (ota ? 'من تحديث تلقائي' : 'الأصلية') + '</span>';
+  var pending = u.pendingBuild > (u.loadedBuild || 0);
+  var st = 'idle', txt = 'لسه ما اتعملش فحص';
+  if (lastUpd && lastUpd.ok === false) { st = 'err'; txt = 'تعذر الفحص: ' + (lastUpd.error || 'مفيش نت'); }
+  else if (pending || (upd && upd.webReady)) { st = 'new'; txt = 'فيه تحديث متحمّل وجاهز — اضغط «تطبيق»'; }
+  else if (upd && (upd.apkAvailable || upd.webNeedsApk)) { st = 'new'; txt = 'فيه إصدار APK جديد ' + (upd.apkVersion || ''); }
+  else if (lastUpd && lastUpd.ok) { st = 'ok'; txt = 'انت على آخر إصدار'; }
+  else if (u.lastCheck) { st = 'ok'; txt = 'آخر فحص تمام'; }
+  $('devStatus').className = 'status ' + st; $('devStatusTxt').textContent = txt;
+  $('devApply').disabled = !pending && !(upd && upd.webReady);
+  $('devLast').textContent = u.lastCheck ? 'آخر فحص ناجح: ' + new Date(u.lastCheck).toLocaleString('ar-EG') : '';
+  var rows = [
+    ['إصدار التطبيق (APK)', (u.nativeName || '') + ' — كود ' + (u.nativeCode || ''), 0],
+    ['إصدار الواجهة', VERSION + ' — رقم ' + u.loadedBuild + (ota ? ' (تحديث تلقائي)' : ' (الأصلية)'), 0],
+    ['الواجهة الأصلية في التطبيق', 'رقم ' + u.assetBuild, 0],
+    ['تحديث متحمّل', u.pendingBuild > 0 ? 'رقم ' + u.pendingBuild : 'لا', 0],
+    ['كود الجهاز', A.getDeviceCode(), 1],
+    ['التفعيل', licText(getLic()) || '-', 0],
+    ['مصدر التحديثات', u.updateBase || '', 1]
+  ];
+  $('devInfo').innerHTML = rows.map(function(r){ return '<div><dt>' + esc(r[0]) + '</dt><dd' + (r[2] ? ' class="mono"' : '') + '>' + esc(r[1]) + '</dd></div>'; }).join('');
+};
+$('devCheck').onclick = function(){ if (has('checkUpdates')) { A.checkUpdates(); toast('جاري الفحص...'); } };
+$('devApply').onclick = function(){ if (has('applyWebUpdate')) A.applyWebUpdate(); };
+$('devReset').onclick = function(){ confirmBox('الرجوع للنسخة الأصلية', 'هيتمسح أي تحديث تلقائي متحمّل، والبرنامج هيرجع لواجهة التطبيق الأصلية. البيانات مش هتتأثر.', 'رجوع', function(){ if (has('resetWebUpdate')) A.resetWebUpdate(); }, true); };
+
+// ===== البداية =====
+function start(){
+  if (!A) { document.querySelector('main').innerHTML = '<p class="empty">البرنامج ده بيشتغل من تطبيق الأندرويد بس.</p>'; return; }
+  load();
+  show('home', null, false);
+}
+window.__test = {state: function(){ return state; }, calcAmount: calcAmount, parseNum: parseNum, checksum: checksum, tafqeet: tafqeet,
+  statementHtml: function(id){ return statementHtml(custById(id)); }, receiptHtml: function(id){ return receiptHtml(entById(id)); }};
+start();
+})();
+</script>
+</body>
+</html>
