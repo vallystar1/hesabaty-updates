@@ -226,6 +226,8 @@ textarea{min-height:76px}
         <input type="text" id="actKey" autocomplete="off" autocapitalize="characters" spellcheck="false" dir="ltr" placeholder="XXXX-XXXX-XXXX-XXXX" aria-describedby="actErr">
         <div class="err" id="actErr" role="alert"></div>
         <button class="btn block" type="button" id="actBtn" style="margin-top:10px">تفعيل</button>
+        <label for="actName">اسمك أو اسم نشاطك (عشان نعرفك على واتساب)</label>
+        <input type="text" id="actName" autocomplete="name">
         <button class="btn dark block" type="button" id="actWa" style="margin-top:10px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l1.3-4A8 8 0 1112 20a8 8 0 01-4-1z"/><path d="M9 10c.5 2 2 3.5 4 4l1.2-1.2 2 1-.6 1.6c-3.4.2-7.4-3.8-7.2-7.2L10 7.6l1 2z"/></svg>كلّمنا على واتساب للتفعيل</button>
       </div>
       <div class="card" id="actBackupBox" hidden>
@@ -719,8 +721,14 @@ function announce(msg){ var l = $('live'); l.textContent = ''; setTimeout(functi
 // ===== الترخيص =====
 function getLic(){ try { return JSON.parse(A.getLicense()) || {state:'none'}; } catch(e){ return {state:'none'}; } }
 function tryActivate(key){ try { return JSON.parse(A.activate(key)); } catch(e){ return {ok:false, msg:'حصلت مشكلة، جرّب تاني'}; } }
+function contactName(){
+  var o = state.settings.owner, n = '';
+  try { n = localStorage.getItem('contact_name') || ''; } catch(e) {}
+  return n || o.biz || o.name || '';
+}
 function contactWa(){
-  var msg = 'السلام عليكم، عايز أفعّل برنامج «حساباتي».\nكود الجهاز: ' + A.getDeviceCode();
+  var o = state.settings.owner, nm = contactName(), ph = o.phone || '';
+  var msg = 'السلام عليكم، عايز أفعّل برنامج «حساباتي».' + (nm ? '\nالاسم: ' + nm : '') + (ph ? '\nالتليفون: ' + ph : '') + '\nكود الجهاز: ' + A.getDeviceCode();
   A.openUrl('https://wa.me/' + CONTACT_WA + '?text=' + encodeURIComponent(msg));
 }
 function earliestCreated(d){
@@ -817,6 +825,7 @@ RENDER.activate = function(){
   else if (l.state === 'clock') { st.hidden = false; st.textContent = 'تاريخ الموبايل مش مظبوط (راجع لورا). ظبّط التاريخ والساعة من إعدادات الموبايل وافتح البرنامج تاني.'; }
   else st.hidden = true;
   $('actBackupBox').hidden = !(state.customers.length || state.entries.length);
+  $('actName').value = contactName();
   var dc = A.getDeviceCode();
   $('devCode').textContent = dc;
   $('devCode').setAttribute('aria-label', 'كود الجهاز: ' + dc.split('').join(' ').replace(/ - /g, '، '));
@@ -831,7 +840,11 @@ $('actBtn').onclick = function(){
   else { $('actErr').textContent = r.msg; $('actKey').focus(); }
 };
 $('actBackup').onclick = function(){ doBackup(); };
-$('actWa').onclick = contactWa;
+$('actWa').onclick = function(){
+  var n = $('actName').value.trim();
+  try { if (n) localStorage.setItem('contact_name', n); } catch(e) {}
+  contactWa();
+};
 $('actKey').addEventListener('keydown', function(e){ if (e.key === 'Enter') $('actBtn').click(); });
 
 // ===== القفل =====
